@@ -21,10 +21,10 @@ Following steps show how to set the COVID-19 database for the CS564 finall proje
                       mental_health_providers BIGINT,
                       uninsured BIGINT,
                       PRIMARY KEY (socio_id));
-  CREATE TABLE hold (name VARCHAR(255),
-                       state VARCHAR(255),
-                       socio_id BIGINT,
-                       PRIMARY KEY (name, state,socio_id));
+  CREATE TABLE hold (socio_id VARCHAR(255),
+                     name VARCHAR(255),
+                     state VARCHAR(255),
+                     PRIMARY KEY (socio_id, name, state));
 4. Load .csv data into tables:
   SET GLOBAL local_infile = true;
   mysql -u <your username> -p --local-infile covid19
