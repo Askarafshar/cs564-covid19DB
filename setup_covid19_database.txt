@@ -1,0 +1,4 @@
+Following steps show how to set the COVID-19 database for the CS564 finall project.
+1. Log into your MYSQL server
+2. run CREATE DATABASE covid19
+3. Create tables:
