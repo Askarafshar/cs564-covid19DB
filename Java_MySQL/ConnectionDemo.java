@@ -44,10 +44,10 @@ public class ConnectionDemo {
 
 /*
 ///////////////////OUTPUT///////////////////
-//
-//
-// Successfully connected to the database
-//
-//
+//					  //
+//					  //
+// Successfully connected to the database //
+//					  //
+//					  //
 ////////////////////////////////////////////
 */
