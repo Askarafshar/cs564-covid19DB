@@ -43,7 +43,7 @@ public class ConnectionDemo {
 }
 
 /*
-///////////OUTPUT///////////////////////////
+///////////////////OUTPUT///////////////////
 //
 // Successfully connected to the database
 //
