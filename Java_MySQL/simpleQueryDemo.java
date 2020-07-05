@@ -74,7 +74,7 @@ public class SimpleQueryDemo {
 	
 	
 }
-/* The code should print:
+/* The code should print out:
 Successfully connected to the database
 name	state	total_deaths	population	
 Abbeville	South Carolina	430	24951	
