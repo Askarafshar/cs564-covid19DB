@@ -74,3 +74,12 @@ public class SimpleQueryDemo {
 	
 	
 }
+/* The code should print:
+Successfully connected to the database
+name	state	total_deaths	population	
+Abbeville	South Carolina	430	5209	
+Acadia	Louisiana	1027	15815	
+Accomack	Virginia	600	6916	
+Ada	Idaho	3940	126673	
+Adair	Iowa	85	1515	
+*/
