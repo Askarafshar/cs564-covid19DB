@@ -2,4 +2,4 @@
 2. Create a new project on Eclipes.
 3. Save the Jar file into Eclipse project folder.
 4. Add External Jar thourgh Java Build Path on Eclipse.
-5. Runn the ConnectionDemo.java 
+5. Run the ConnectionDemo.java 
