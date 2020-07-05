@@ -27,6 +27,7 @@ Following steps show how to set the COVID-19 database for the CS564 finall proje
                      FOREIGN KEY (name) REFERENCES county(name),
                      FOREIGN KEY (name) REFERENCES county(name),
                      PRIMARY KEY (socio_id, name, state));
+  **TODO: RACE & HAS Tables.**
 4. Load .csv data into tables:
   SET GLOBAL local_infile = true;
   mysql -u <your username> -p --local-infile covid19
