@@ -36,5 +36,5 @@ Following steps show how to set the COVID-19 database for the CS564 finall proje
   SET GLOBAL local_infile = true;
   mysql -u <your username> -p --local-infile covid19
   LOAD DATA LOCAL INFILE '<PATH TO YOUR .CSV FILE>/<CSV FILE_NAME>.csv' 
-                                                 INTO TABLE county FIELDS TERMINATED BY ',' 
+                                                 INTO TABLE <TABLE> FIELDS TERMINATED BY ',' 
                                                  LINES TERMINATED BY '\n'; [LINUX COMMAND!]
