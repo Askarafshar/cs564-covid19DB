@@ -67,7 +67,7 @@ public class SimpleQueryDemo {
 	
 	    	SimpleQueryDemo demoObj = new SimpleQueryDemo();
 	    	demoObj.Connection();
-	    	String sqlQuery ="select * from county limit 5;";
+	    	String sqlQuery ="SELECT * FROM county LIMIT 5;";
 	    	demoObj.simpleQuery(sqlQuery);
 	    }
 	    
