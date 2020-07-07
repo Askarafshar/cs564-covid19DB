@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -94,14 +97,48 @@ public class BTreeMain {
         }
     }
 
+    /*
+     * TODO: Extract the students information from "Students.csv" return the
+     * list<Students>
+     */
     private static List<Student> getStudents() {
-
-        /** TODO:
-         * Extract the students information from "Students.csv"
-         * return the list<Students>
-         */
-
+        // local variables
+        String currStudent, name, major, level;
+        long sid, rid;
+        int age;
+        String[] studentInfo;
         List<Student> studentList = new ArrayList<>();
+
+        // open file, try block will manage closing buffer when we finish
+        try (BufferedReader studentBuf = new BufferedReader(new FileReader("Checkpoint3/Student.csv"))) {
+            // parse each line
+            while((currStudent = studentBuf.readLine()) != null) {
+                // split line by delimiter
+                studentInfo = currStudent.split(",");
+                
+                // extract student data
+                sid = Long.parseLong(studentInfo[0]);
+                name = studentInfo[1];
+                major = studentInfo[2];
+                level = studentInfo[3];
+                age = Integer.parseInt(studentInfo[4]);
+                rid = Integer.parseInt(studentInfo[5]);
+
+                // add student to list
+                studentList.add(new Student(sid, age, name, major, level, rid));
+            }
+
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("File student.csv not found.");
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            System.out.println("Age or record ID was an invalid integer.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Reading a line failed.");
+            e.printStackTrace();
+        }
         return studentList;
     }
 }
