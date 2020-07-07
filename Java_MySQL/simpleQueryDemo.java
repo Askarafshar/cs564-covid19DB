@@ -15,7 +15,7 @@ public class SimpleQueryDemo {
 	 static final String databaseURL ="jdbc:mysql://"+hostName+"/"+databasePrefix+"?autoReconnect=true&useSSL=false";
 	 static final String password="YOUR OWN PASSWORD"; // please enter your own password
         
-	    private Connection connection = null;
+	private Connection connection = null;
         private Statement statement = null;
         private ResultSet resultSet = null;
         
