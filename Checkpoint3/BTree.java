@@ -41,7 +41,7 @@ class BTree {
         /**
          * TODO:
          * Implement this function to insert in the B+Tree.
-         * Also, implement in student.csv after inserting in B+Tree.
+         * Also, insert in student.csv after inserting in B+Tree.
          */
         return this;
     }
@@ -49,7 +49,8 @@ class BTree {
     boolean delete(long studentId) {
         /**
          * TODO:
-         * Implement this function to delete in the B+Tree and student table.
+         * Implement this function to delete in the B+Tree.
+         * Also, delete in student.csv after deleting in B+Tree, if it exists.
          * Return true if the student is deleted successfully otherwise, return false.
          */
         return true;
