@@ -41,4 +41,18 @@ class BTreeNode {
         this.next = null;
         this.values = new long[2 * t - 1];
     }
+    
+    public long[] getKeys() {
+    	return keys;    	
+    }
+    public void setKeys(long[] keys) {
+    	this.keys = keys;
+    }
+    public BTreeNode[] getChild() {
+    	return children;
+    }
+    public void setChild(BTreeNode[] children) {
+    	this.children = children;
+    }
+    
 }
