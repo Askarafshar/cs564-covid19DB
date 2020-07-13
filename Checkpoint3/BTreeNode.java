@@ -55,4 +55,7 @@ class BTreeNode {
     	this.children = children;
     }
     
+    public String toString() {
+        return values.toString();
+    }
 }
