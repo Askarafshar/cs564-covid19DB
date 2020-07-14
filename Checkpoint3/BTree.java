@@ -37,7 +37,7 @@ class BTree {
      *
      * @author safipourafsh
      */
-long Search(long studentId) {
+long search(long studentId) {
         //return -1 if root is empty
         if (this.root == null) {
             return -1;
