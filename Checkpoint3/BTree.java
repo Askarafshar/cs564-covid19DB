@@ -211,7 +211,7 @@ long search(long studentId) {
         }
 
         // find the node with the student
-        studentNode = getNode(root, studentId);
+        studentNode = searchLeafNode(root, studentId);
         long[] studKeys = studentNode.getKeys();
         for (int i = 0; i < studKeys.length; i++) {
             if (studentId == studKeys[i]) {
@@ -226,27 +226,15 @@ long search(long studentId) {
             }
         }
 
-        
-
         // Perform delete and update the node
         removeKeyValue(studentNode, studIndex);
-        /*long[] studValues = studentNode.values;
-        for (int i = studIndex; i < studKeys.length - 1; i++) {
-            studKeys[i] = studKeys[i + 1];
-            studValues[i] = studValues[i + 1];
-        }
-        studKeys[studKeys.length - 1] = 0;
-        studValues[studValues.length - 1] = 0;
-        studentNode.setKeys(studKeys);
-        studentNode.values = studValues;
-        studentNode.n = studentNode.n - 1;*/
 
         // delete cases
         // 1 - delete leaves node in valid state
         // 2 - delete leaves node requiring more values, borrow from neighbor
         // 3 - delete leaves node requiring more values, merge with neighbor
 
-        if (studentNode.n < t) {
+        if (studentNode.n < t && root != studentNode) {
             // cases 2/3: invalid
             BTreeNode parent = findParent(studentId);
             int studNodeIndex = -1;
@@ -258,72 +246,19 @@ long search(long studentId) {
             if (studNodeIndex < parent.n) {
                 // sibling to right exists so try to borrow
                 BTreeNode sibling = parent.getChild()[studNodeIndex + 1];
-                if (sibling.n > t) {
-                    // sibling can lend a value
-                    borrow = true;
-                    long tempKey, tempVal;
-                    long[] currKeys = studentNode.getKeys();
-                    long[] currVals = studentNode.values;
-                    long[] parKeys = parent.getKeys();
-                    // remove from sibling
-                    tempKey = sibling.getKeys()[0];
-                    tempVal = sibling.values[0];
-                    removeKeyValue(sibling, 0);
-                    // add to current
-                    currKeys[studentNode.n] = tempKey;
-                    currVals[studentNode.n] = tempVal;
-                    studentNode.setKeys(currKeys);
-                    studentNode.values = currVals;
-                    studentNode.n = studentNode.n + 1;
-                    // update parent
-                    parKeys[studNodeIndex] = tempKey;
-                    parent.setKeys(parKeys);
-                }
+                borrow = borrowHelper(studentNode, parent, sibling, studNodeIndex, true);
             }
-            
             if (!borrow && studNodeIndex != 0) {
                 // sibling to left exists so try to borrow
                 BTreeNode sibling = parent.getChild()[studNodeIndex - 1];
-                if (sibling.n > t) {
-                    // sibling can lend a value
-                    long tempKey, tempVal;
-                    long[] currKeys = studentNode.getKeys();
-                    long[] currVals = studentNode.values;
-                    long[] parKeys = parent.getKeys();
-                    // remove from sibling
-                    tempKey = sibling.getKeys()[sibling.n - 1];
-                    tempVal = sibling.values[sibling.n - 1];
-                    removeKeyValue(sibling, sibling.n - 1);
-                    // add to current
-                    for (int i = currKeys.length - 1; i > 0; i--) {
-                        currKeys[i] = currKeys[i - 1];
-                        currVals[i] = currVals[i - 1];
-                    }
-                    currKeys[0] = tempKey;
-                    currVals[0] = tempVal;
-                    studentNode.setKeys(currKeys);
-                    studentNode.values = currVals;
-                    studentNode.n = studentNode.n + 1;
-                    // update parent
-                    parKeys[studNodeIndex - 1] = tempKey;
-                    parent.setKeys(parKeys);
-                }
+                borrow = borrowHelper(studentNode, parent, sibling, studNodeIndex, true);
             }
 
             // case 3 - must merge with sibling
-            if (studNodeIndex < parent.n) {
-                // sibling to right exists so try to merge
-                BTreeNode sibling = parent.getChild()[studNodeIndex + 1];
-                if (sibling.n + studentNode.n < 2 * t - 1) {
-                    // this can fit into 1 node
-                    merge = true;
-                }
-            }
-            if (!merge && studNodeIndex != 0) {
-                // sibling to left exists so try to borrow
+            if (!borrow) {
+                // TODO: implement functionality to merge upon delete
             }
         }
-
 
         // attempt to delete from .csv
 
@@ -342,6 +277,70 @@ long search(long studentId) {
         node.setKeys(keys);
         node.values = values;
         node.n = node.n - 1;
+    }
+
+    /**
+     * 
+     * @param left      node to 'left'
+     * @param parent    parent of nodes trying to borrow
+     * @param right     node to 'right'
+     * @param LfromR    true if left node is borrowing from right node
+     * @return          true if the borrow was successful, null otherwise
+     */
+    private boolean borrowHelper(BTreeNode left, BTreeNode parent, BTreeNode right, int borrowerIndex, boolean LfromR) {
+        if (LfromR) {
+            // sibling = right
+            if (right.n > t) {
+                // sibling can lend a value
+                long tempKey, tempVal;
+                long[] currKeys = left.getKeys();
+                long[] currVals = left.values;
+                long[] parKeys = parent.getKeys();
+                // remove from sibling
+                tempKey = right.getKeys()[0];
+                tempVal = right.values[0];
+                removeKeyValue(right, 0);
+                // add to current
+                currKeys[left.n] = tempKey;
+                currVals[left.n] = tempVal;
+                left.setKeys(currKeys);
+                left.values = currVals;
+                left.n = left.n + 1;
+                // update parent
+                parKeys[borrowerIndex] = tempKey;
+                parent.setKeys(parKeys);
+                return true;
+            }
+        } 
+        else {
+            // sibling = left
+            if (left.n > t) {
+                // sibling can lend a value
+                long tempKey, tempVal;
+                long[] currKeys = right.getKeys();
+                long[] currVals = right.values;
+                long[] parKeys = parent.getKeys();
+                // remove from sibling
+                tempKey = left.getKeys()[left.n - 1];
+                tempVal = left.values[left.n - 1];
+                removeKeyValue(left, left.n - 1);
+                // add to current
+                for (int i = currKeys.length - 1; i > 0; i--) {
+                    currKeys[i] = currKeys[i - 1];
+                    currVals[i] = currVals[i - 1];
+                }
+                currKeys[0] = tempKey;
+                currVals[0] = tempVal;
+                right.setKeys(currKeys);
+                right.values = currVals;
+                right.n = right.n + 1;
+                // update parent
+                parKeys[borrowerIndex - 1] = tempKey;
+                parent.setKeys(parKeys);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
