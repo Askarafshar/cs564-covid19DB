@@ -363,16 +363,38 @@ long search(long studentId) {
         return result;
     }
 
+/**
+     * 
+     * Prints the B+Tree's leaf node values (recordIDs).
+     * Return a list of recordIDs from left to right of leaf nodes.
+     *@param
+     *@return list of recordIDs
+     *@author safipourafsh
+     */
     List<Long> print() {
-
         List<Long> listOfRecordID = new ArrayList<>();
-
-        /**
-         * TODO:
-         * Implement this function to print the B+Tree.
-         * Return a list of recordIDs from left to right of leaf nodes.
-         *
-         */
-        return listOfRecordID;
+        BTreeNode temp = this.root;
+        BTreeNode leftLeafNode = getLeftLeafNode(temp);
+         
+        while(!(leftLeafNode==null)) {
+        	for(int i=0;i<leftLeafNode.n;i++) {
+        		listOfRecordID.add(leftLeafNode.values[i]);
+        	}
+        	leftLeafNode = leftLeafNode.next;
+        }
+       return listOfRecordID;
+    }
+    /*
+     * gets the left leaf node, used in print function.
+     * @param BTreeNode node
+     * @return left leaf node
+     * @author safipourafsh
+     */
+    private BTreeNode getLeftLeafNode(BTreeNode node) {
+        //If the node is a leaf, return
+        if (node.leaf) {
+            return node;
+        }
+        return getLeftLeafNode(node.children[0]);
     }
 }
