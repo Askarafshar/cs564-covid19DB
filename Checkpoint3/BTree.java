@@ -26,7 +26,7 @@ class BTree {
         this.root = null;
         this.t = t;
     }
-    /////TODO: review the code again. -ASA
+    //TODO: review the code again. -ASA
      /**
      * Search function in the B+Tree.
      * Return recordID for the given StudentID.
@@ -92,14 +92,90 @@ class BTree {
         return this;
     }
 
+    /**
+     * Deletes an entry from the B+ tree given a studentId. Then it attempts to remove
+     * the entry from student.csv. 
+     * 
+     * @param studentId     id of the student to be deleted
+     * @return true     if the student was successfully deleted from the B+ tree
+     *                      does not guarantee it was removed from student.csv
+     *         false    if student does not exist or failed delete
+     * @author kwalker26
+     */
     boolean delete(long studentId) {
-        /**
-         * TODO:
-         * Implement this function to delete in the B+Tree.
-         * Also, delete in student.csv after deleting in B+Tree, if it exists.
-         * Return true if the student is deleted successfully otherwise, return false.
-         */
+        BTreeNode studentNode;
+        int studIndex = 0;
+        int numEntries = 0;
+
+        if (root == null) {
+            return false;   // empty tree
+        }
+
+        // find the node with the student
+        studentNode = getNode(root, studentId);
+        long[] studKeys = studentNode.getKeys();
+        for (int i = 0; i < studKeys.length; i++) {
+            if (studKeys[i] == -1) {
+                break;
+            }
+            else if(studentId == studKeys[i]) {
+                // we found the student entry to delete
+                studIndex = i;
+    		}
+    		else if(studentId < studKeys[i]) {
+                // student entry not found
+    			System.out.println("The given studentId was not found");
+                return false;
+            }
+            numEntries++;   // do not want this to increment on empty key
+        }
+
+        // delete cases
+        // 1 - delete leaves node in valid state
+        // 2 - delete leaves node requiring more values, borrow from neighbor
+        // 3 - delete leaves node requiring more values, merge with neighbor
+
+        long[] studValues = studentNode.values;
+        if (numEntries > t) {
+            // case 1
+            for (int i = studIndex; i < studKeys.length - 1; i++) {
+                studKeys[i] = studKeys[i + 1];
+                studValues[i] = studValues[i + 1];
+            }
+            studKeys[studKeys.length - 1] = 0;
+            studValues[studValues.length - 1] = 0;
+            // update node
+            studentNode.setKeys(studKeys);
+            studentNode.values = studValues;
+        }
+        else if (numEntries == this.t) {
+            // cases 2/3: invalid
+
+        }
+
+
+        // attempt to delete from .csv
+
         return true;
+    }
+
+    /**
+     * Traverses the tree (starting at the root) to find the parent of the leaf 
+     * node where the given studentId record would exist. 
+     * 
+     * @param studentId    student ID of the record you want to parent node of
+     * @return      the parent node for the given ID
+     * @author kwalker26
+     */
+    private BTreeNode findParent(long studentId) {
+        BTreeNode result = root;
+        
+        // go until we are at parent of a leaf
+        while (!result.getChild()[0].leaf) {
+            result = result.getChild()[childrenSearch(studentId, result.getKeys())];
+        }
+
+        return result;
     }
 
     List<Long> print() {
