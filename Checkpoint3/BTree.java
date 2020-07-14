@@ -67,7 +67,7 @@ long Search(long studentId) {
         }
         //If the key is smaller than the first key in the node, follow its first child to continue
         if (studentId < node.keys[0]) {
-            return searchLeafNode(root.children[0], studentId);
+            return searchLeafNode(node.children[0], studentId);
             //If the key is bigger than the last key in the node, follow its last child to continue
         }else if (studentId > node.keys[node.keys.length - 1]) {
             return searchLeafNode(node.children[node.keys.length - 1], studentId);
