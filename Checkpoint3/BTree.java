@@ -133,7 +133,35 @@ long search(long studentId) {
          * Implement this function to insert in the B+Tree.
          * Also, insert in student.csv after inserting in B+Tree.
          */
+        long studentId = student.studentId;
+    	long recordId = student.recordId;
+    	if(root.getChild() == null){
+    		root.keys[0] = studentId; 
+    		root.values[0] = recordId;
+    	}
+    	BTreeNode candidate = searchLeafNode(root, studentId);
+    	//if there is room for the key
+    	if(!capacity(candidate)) {
+	    	int index = childrenSearch(studentId, candidate.keys);
+	    	for(int i=candidate.values.length-2; i>=index; i--) {
+	    		candidate.keys[i+1] = candidate.keys[i];
+	    		candidate.values[i+1] = candidate.values[i];
+	    	}
+	    	candidate.keys[index] = studentId;
+	    	candidate.values[index] = recordId;
+    	}
+    	//if the node if full we need split the node
+    	else {
+    		
+    	}
         return this;
+    }
+    /**
+     * returns true if the node is full and false otherwise 
+     */
+    public boolean capacity(BTreeNode node) {
+    	if(node.keys.length == node.values.length) {return true;}
+    	return false;
     }
 
     /**
