@@ -40,12 +40,6 @@ class BTreeNode {
         this.n = 0;
         this.next = null;
         this.values = new long[2 * t - 1];
-
-        // initialize arrays
-        for (int i = 0; i < 2 * t - 1; i++) {
-            this.keys[i] = -1;
-            this.values[i] = -1;
-        }
     }
     
     public long[] getKeys() {

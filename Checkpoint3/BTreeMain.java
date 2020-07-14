@@ -33,6 +33,8 @@ public class BTreeMain {
         /** Reading the database student.csv into B+Tree Node*/
         List<Student> studentsDB = getStudents();
 
+        // TODO: clear file contents so we do not duplicate entries
+
         for (Student s : studentsDB) {
             bTree.insert(s);
         }
@@ -55,6 +57,8 @@ public class BTreeMain {
                             String level = s2.next();
                             int age = Integer.parseInt(s2.next());
                             /** TODO: Write a logic to generate recordID*/
+                            // TODO: implement a way to insert a student if no recordID is given
+                            // piazza faqs mention storing the highest used recordID and then incrementing from that
                             long recordID = Long.parseLong(s2.next());
 
                             Student s = new Student(studentId, age, studentName, major, level, recordID);

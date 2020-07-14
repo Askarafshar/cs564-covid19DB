@@ -105,7 +105,6 @@ class BTree {
     boolean delete(long studentId) {
         BTreeNode studentNode;
         int studIndex = 0;
-        int numEntries = 0;
 
         if (root == null) {
             return false;   // empty tree
@@ -115,48 +114,134 @@ class BTree {
         studentNode = getNode(root, studentId);
         long[] studKeys = studentNode.getKeys();
         for (int i = 0; i < studKeys.length; i++) {
-            if (studKeys[i] == -1) {
-                break;
-            }
-            else if(studentId == studKeys[i]) {
+            if (studentId == studKeys[i]) {
                 // we found the student entry to delete
                 studIndex = i;
+                break;
     		}
-    		else if(studentId < studKeys[i]) {
+    		else if (studentId < studKeys[i]) {
                 // student entry not found
     			System.out.println("The given studentId was not found");
                 return false;
             }
-            numEntries++;   // do not want this to increment on empty key
         }
+
+        
+
+        // Perform delete and update the node
+        removeKeyValue(studentNode, studIndex);
+        /*long[] studValues = studentNode.values;
+        for (int i = studIndex; i < studKeys.length - 1; i++) {
+            studKeys[i] = studKeys[i + 1];
+            studValues[i] = studValues[i + 1];
+        }
+        studKeys[studKeys.length - 1] = 0;
+        studValues[studValues.length - 1] = 0;
+        studentNode.setKeys(studKeys);
+        studentNode.values = studValues;
+        studentNode.n = studentNode.n - 1;*/
 
         // delete cases
         // 1 - delete leaves node in valid state
         // 2 - delete leaves node requiring more values, borrow from neighbor
         // 3 - delete leaves node requiring more values, merge with neighbor
 
-        long[] studValues = studentNode.values;
-        if (numEntries > t) {
-            // case 1
-            for (int i = studIndex; i < studKeys.length - 1; i++) {
-                studKeys[i] = studKeys[i + 1];
-                studValues[i] = studValues[i + 1];
-            }
-            studKeys[studKeys.length - 1] = 0;
-            studValues[studValues.length - 1] = 0;
-            // update node
-            studentNode.setKeys(studKeys);
-            studentNode.values = studValues;
-        }
-        else if (numEntries == this.t) {
+        if (studentNode.n < t) {
             // cases 2/3: invalid
+            BTreeNode parent = findParent(studentId);
+            int studNodeIndex = -1;
+            boolean borrow = false;
+            boolean merge = false;
 
+            // try case 2 - attempt borrowing
+            studNodeIndex = childrenSearch(studentId, parent.getKeys());
+            if (studNodeIndex < parent.n) {
+                // sibling to right exists so try to borrow
+                BTreeNode sibling = parent.getChild()[studNodeIndex + 1];
+                if (sibling.n > t) {
+                    // sibling can lend a value
+                    borrow = true;
+                    long tempKey, tempVal;
+                    long[] currKeys = studentNode.getKeys();
+                    long[] currVals = studentNode.values;
+                    long[] parKeys = parent.getKeys();
+                    // remove from sibling
+                    tempKey = sibling.getKeys()[0];
+                    tempVal = sibling.values[0];
+                    removeKeyValue(sibling, 0);
+                    // add to current
+                    currKeys[studentNode.n] = tempKey;
+                    currVals[studentNode.n] = tempVal;
+                    studentNode.setKeys(currKeys);
+                    studentNode.values = currVals;
+                    studentNode.n = studentNode.n + 1;
+                    // update parent
+                    parKeys[studNodeIndex] = tempKey;
+                    parent.setKeys(parKeys);
+                }
+            }
+            
+            if (!borrow && studNodeIndex != 0) {
+                // sibling to left exists so try to borrow
+                BTreeNode sibling = parent.getChild()[studNodeIndex - 1];
+                if (sibling.n > t) {
+                    // sibling can lend a value
+                    long tempKey, tempVal;
+                    long[] currKeys = studentNode.getKeys();
+                    long[] currVals = studentNode.values;
+                    long[] parKeys = parent.getKeys();
+                    // remove from sibling
+                    tempKey = sibling.getKeys()[sibling.n - 1];
+                    tempVal = sibling.values[sibling.n - 1];
+                    removeKeyValue(sibling, sibling.n - 1);
+                    // add to current
+                    for (int i = currKeys.length - 1; i > 0; i--) {
+                        currKeys[i] = currKeys[i - 1];
+                        currVals[i] = currVals[i - 1];
+                    }
+                    currKeys[0] = tempKey;
+                    currVals[0] = tempVal;
+                    studentNode.setKeys(currKeys);
+                    studentNode.values = currVals;
+                    studentNode.n = studentNode.n + 1;
+                    // update parent
+                    parKeys[studNodeIndex - 1] = tempKey;
+                    parent.setKeys(parKeys);
+                }
+            }
+
+            // case 3 - must merge with sibling
+            if (studNodeIndex < parent.n) {
+                // sibling to right exists so try to merge
+                BTreeNode sibling = parent.getChild()[studNodeIndex + 1];
+                if (sibling.n + studentNode.n < 2 * t - 1) {
+                    // this can fit into 1 node
+                    merge = true;
+                }
+            }
+            if (!merge && studNodeIndex != 0) {
+                // sibling to left exists so try to borrow
+            }
         }
 
 
         // attempt to delete from .csv
 
         return true;
+    }
+
+    private void removeKeyValue(BTreeNode node, int index) {
+        long[] keys = node.getKeys();
+        long[] values = node.values;
+        for (int i = index; i < keys.length - 1; i++) {
+            keys[i] = keys[i + 1];
+            values[i] = values[i + 1];
+        }
+        keys[keys.length - 1] = 0;
+        values[values.length - 1] = 0;
+        node.setKeys(keys);
+        node.values = values;
+        node.n = node.n - 1;
     }
 
     /**
