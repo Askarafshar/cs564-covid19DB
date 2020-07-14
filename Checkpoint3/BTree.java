@@ -134,6 +134,20 @@ class BTree {
         }
         return index;
     }
+    /*
+    *return the size of array not considering zeros
+    *@params array of keys or values
+    *@return size of array (# of non-zero elements)
+    *@author safipourafsh
+    */        
+    int nodeSize(long[] keys) {
+        int size = 0;
+        for (int i=0; i<keys.length; i++) {
+          if (keys[i] != 0)
+            size++;
+        }
+        return size;
+      }
 
     BTree insert(Student student) {
         /**
