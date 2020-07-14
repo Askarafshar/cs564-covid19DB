@@ -93,38 +93,38 @@ long Search(long studentId) {
     }
     
    //to traverse and get node
-   // public BTreeNode getNode(BTreeNode node, long key) {
-   // 	while(!(node.children==null)) {
-   // 		node = node.getChild()[childrenSearch(key, node.getKeys())];
-   // 	}
-   //	return node;
-   // }
+    public BTreeNode getNode(BTreeNode node, long key) {
+    	while(!(node.children==null)) {
+    		node = node.getChild()[childrenSearch(key, node.getKeys())];
+    	}
+    	return node;
+    }
    //search to consider the internal nodes too.
-   // public int childrenSearch(long key, long[] keys) {
-   // 	int start = 0;
-   // 	int length = keys.length -1;
-   // 	int mid;
-   // 	int index = -1;
-   // 	if(key < keys[start]) {
-   // 		return 0;
-   // 	}
-   // 	if(key >= keys[length]) {
-   // 		return keys.length;
-   // 	}
-   // 	while(start <= length) {
-   // 		mid = (start + length) / 2;
-   // 		if(key < keys[mid] && key >= keys[mid -1]) {
-   // 			index = mid;
-   // 			break;
-   // 		}
-   // 		else if(key >= keys[mid]) {
-   // 			start = mid + 1;
-   // 		}else {
-   // 			length = mid - 1;
-   // 		}
-   // 	}
-   // 	return index;
-   //}
+    public int childrenSearch(long key, long[] keys) {
+    	int start = 0;
+    	int length = keys.length -1;
+    	int mid;
+    	int index = -1;
+    	if(key < keys[start]) {
+    		return 0;
+    	}
+    	if(key >= keys[length]) {
+    		return keys.length;
+    	}
+    	while(start <= length) {
+    		mid = (start + length) / 2;
+    		if(key < keys[mid] && key >= keys[mid -1]) {
+    			index = mid;
+    			break;
+    		}
+    		else if(key >= keys[mid]) {
+    			start = mid + 1;
+    		}else {
+    			length = mid - 1;
+    		}
+    	}
+    	return index;
+   }
     
      
     BTree insert(Student student) {
