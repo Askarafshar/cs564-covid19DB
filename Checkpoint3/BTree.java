@@ -83,6 +83,40 @@ class BTree {
     	return index;
     }
     
+    /**
+     * returns the leaf node which might contain key
+     *
+     * @param key
+     * @return node
+     */
+    private BTreeNode searchLeafNode(BTreeNode node, long studentId) {
+        //If the node is a leaf, return
+        if (node.leaf) {
+            return node;
+        }
+        //If the key is smaller than the first key in the node, follow its first child to continue
+        if (studentId < node.keys[0]) {
+            return searchLeafNode(root.children[0], studentId);
+            //If the key is bigger than the last key in the node, follow its last child to continue
+        }else if (studentId > node.keys[node.keys.length - 1]) {
+            return searchLeafNode(node.children[node.keys.length - 1], studentId);
+        } else {
+            //Use binary search to find the child to follow
+            int left = 0, right = node.keys.length - 1, mid;
+            while (left <= right) {
+                mid = (left + right) / 2;
+                if (node.keys[mid]==studentId) {
+                    return searchLeafNode(node.children[mid + 1], studentId);
+                } else if (node.keys[mid] < studentId) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+            return searchLeafNode(node.children[left], studentId);
+        }
+    }
+    
     BTree insert(Student student) {
         /**
          * TODO:
