@@ -258,9 +258,15 @@ long search(long studentId) {
             if (!borrow) {
                 // TODO: implement functionality to merge upon delete
             }
+
+            if (!borrow && !merge) {
+                System.out.println("Failed to merge or borrow upon delete.");
+                return false;
+            }
         }
 
         // attempt to delete from .csv
+
 
         return true;
     }
