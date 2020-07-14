@@ -127,22 +127,26 @@ long search(long studentId) {
    }
     
      
-    BTree insert(Student student) {
+   BTree insert(Student student) {
         /**
          * TODO:
          * Implement this function to insert in the B+Tree.
          * Also, insert in student.csv after inserting in B+Tree.
-         */
-        long studentId = student.studentId;
-    	long recordId = student.recordId;
-    	if(root.getChild() == null){
-    		root.keys[0] = studentId; 
-    		root.values[0] = recordId;
+         */    	
+    	if(root == null){
+    		root.keys[0] = student.studentId; 
+    		root.values[0] = student.recordId;
     	}
-    	BTreeNode candidate = searchLeafNode(root, studentId);
+    	return insertHelper(root, student);
+    }
+    
+    BTree insertHelper(BTreeNode node, Student student) { 
+    	long studentId = student.studentId;
+    	long recordId = student.recordId;
+    	BTreeNode candidate = searchLeafNode(node, studentId);
+    	int index = childrenSearch(studentId, candidate.keys);
     	//if there is room for the key
-    	if(!capacity(candidate)) {
-	    	int index = childrenSearch(studentId, candidate.keys);
+    	if(!capacity(candidate)) {	    	
 	    	for(int i=candidate.values.length-2; i>=index; i--) {
 	    		candidate.keys[i+1] = candidate.keys[i];
 	    		candidate.values[i+1] = candidate.values[i];
@@ -152,8 +156,32 @@ long search(long studentId) {
     	}
     	//if the node if full we need split the node
     	else {
+    		if(candidate == this.root) {
+    			BTreeNode newRoot = new BTreeNode(t, true);
+    			newRoot.children[0] = candidate;
+    		}
+    		BTreeNode newNode = new BTreeNode(t, true);
+    		newNode.keys[0] = studentId; 
+    		for(int i=index; i<candidate.keys.length; i++) {
+    			newNode.keys[i-index+1] = candidate.keys[i];
+    			candidate.keys[i] = 0;    			
+    		}
+    		newNode.next = candidate.next;
+    		candidate.next = newNode;
     		
-    	}
+    		BTreeNode parent = findParent(studentId);
+    		insertHelper(parent, student);    		
+    	}    
+    	
+    	FileWriter writer = new FileWriter("../student.csv");
+    	//Writing data to the csv file
+    	writer.append(String.join(",", student));//it needs to get fixed
+        writer.append("\n");
+        //Flushing data from writer to file
+        writer.flush();
+        writer.close();
+        System.out.println("Data entered");
+        
         return this;
     }
     /**
