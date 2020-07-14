@@ -2,9 +2,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -13,6 +15,8 @@ import java.util.Scanner;
  * You do not need to change this class.
  */
 public class BTreeMain {
+
+    private static long highestRID = -1;
 
     public static void main(String[] args) {
 
@@ -33,7 +37,13 @@ public class BTreeMain {
         /** Reading the database student.csv into B+Tree Node*/
         List<Student> studentsDB = getStudents();
 
-        // TODO: clear file contents so we do not duplicate entries
+        // clear file contents so we do not duplicate entries
+        try {
+            new FileWriter("./student.csv", false).close();
+        } catch (IOException e1) {
+            System.out.println("Failed to clear student.csv prior to inserting data in B+Tree. File may contain duplicate entries after this run.");
+            e1.printStackTrace();
+        }
 
         for (Student s : studentsDB) {
             bTree.insert(s);
@@ -56,10 +66,12 @@ public class BTreeMain {
                             String major = s2.next();
                             String level = s2.next();
                             int age = Integer.parseInt(s2.next());
-                            /** TODO: Write a logic to generate recordID*/
-                            // TODO: implement a way to insert a student if no recordID is given
-                            // piazza faqs mention storing the highest used recordID and then incrementing from that
-                            long recordID = Long.parseLong(s2.next());
+                            long recordID;
+                            try {
+                                recordID = Long.parseLong(s2.next());
+                            } catch (NoSuchElementException e) {
+                                recordID = ++highestRID; 
+                            }
 
                             Student s = new Student(studentId, age, studentName, major, level, recordID);
                             bTree.insert(s);
@@ -101,9 +113,11 @@ public class BTreeMain {
         }
     }
 
-    /*
-     * TODO: Extract the students information from "Students.csv" return the
-     * list<Students>
+    /**
+     * Parses student.csv to return a list of all student entries. 
+     * 
+     * @return  list of student entries
+     * @author  kwalker26
      */
     private static List<Student> getStudents() {
         // local variables
@@ -114,7 +128,7 @@ public class BTreeMain {
         List<Student> studentList = new ArrayList<>();
 
         // open file, try block will manage closing buffer when we finish
-        try (BufferedReader studentBuf = new BufferedReader(new FileReader("Checkpoint3/Student.csv"))) {
+        try (BufferedReader studentBuf = new BufferedReader(new FileReader("./Student.csv"))) {
             // parse each line
             while((currStudent = studentBuf.readLine()) != null) {
                 // split line by delimiter
@@ -130,6 +144,11 @@ public class BTreeMain {
 
                 // add student to list
                 studentList.add(new Student(sid, age, name, major, level, rid));
+
+                // update highest stored rid
+                if (highestRID < rid) {
+                    highestRID = rid;
+                }
             }
 
         }
