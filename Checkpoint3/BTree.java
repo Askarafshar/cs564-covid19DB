@@ -34,6 +34,8 @@ class BTree {
      *
      * @param studentId
      * @return recordID
+     *
+     * @author safipourafsh
      */
 long Search(long studentId) {
         //return -1 if root is empty
@@ -59,6 +61,8 @@ long Search(long studentId) {
      *
      * @param key
      * @return node
+     *
+     * @author safipourafsh
      */
     private BTreeNode searchLeafNode(BTreeNode node, long studentId) {
         //If the node is a leaf, return
