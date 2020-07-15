@@ -110,25 +110,25 @@ class BTree {
 
     // search to consider the internal nodes too.
     public int childrenSearch(long key, long[] keys) {
-        int start = 0;
-        int length = keys.length - 1;
+        int left = 0;
+        int right = keys.length - 1;
         int mid;
         int index = -1;
-        if (key < keys[start]) {
+        if (key < keys[left]) {
             return 0;
         }
-        if (key >= keys[length]) {
+        if (key >= keys[right]) {
             return keys.length;
         }
-        while (start <= length) {
-            mid = (start + length) / 2;
+        while (left <= right) {
+            mid = (left + right) / 2;
             if (key == keys[mid]) {
                 index = mid + 1;
                 break;
             } else if (key > keys[mid]) {
-                start = mid + 1;
+                left = mid + 1;
             } else {
-                length = mid - 1;
+                right = mid - 1;
             }
         }
         return index;
