@@ -341,7 +341,7 @@ class BTree {
     }
 
     private void removeKeyValue(BTreeNode node, int index) {
-        long[] keys = node.getKeys();
+        long[] keys = node.keys;
         long[] values = node.values;
         int numEntries = nodeSize(keys);
         for (int i = index; i < numEntries - 1; i++) {
@@ -365,15 +365,15 @@ class BTree {
     private boolean borrowHelper(BTreeNode left, BTreeNode parent, BTreeNode right, int borrowerIndex, boolean LfromR) {
         if (LfromR) {
             // sibling = right
-            if (nodeSize(right.getKeys()) > t) {
+            if (nodeSize(right.keys) > t) {
                 // sibling can lend a value
                 long tempKey, tempVal;
-                long[] currKeys = left.getKeys();
+                long[] currKeys = left.keys;
                 long[] currVals = left.values;
                 int lftEntries = nodeSize(currKeys);
-                long[] parKeys = parent.getKeys();
+                long[] parKeys = parent.keys;
                 // remove from sibling
-                tempKey = right.getKeys()[0];
+                tempKey = right.keys[0];
                 tempVal = right.values[0];
                 removeKeyValue(right, 0);
                 // add to current
@@ -389,15 +389,15 @@ class BTree {
         } 
         else {
             // sibling = left
-            int lftEntries = nodeSize(left.getKeys());
+            int lftEntries = nodeSize(left.keys);
             if (lftEntries > t) {
                 // sibling can lend a value
                 long tempKey, tempVal;
-                long[] currKeys = right.getKeys();
+                long[] currKeys = right.keys;
                 long[] currVals = right.values;
-                long[] parKeys = parent.getKeys();
+                long[] parKeys = parent.keys;
                 // remove from sibling
-                tempKey = left.getKeys()[lftEntries - 1];
+                tempKey = left.keys[lftEntries - 1];
                 tempVal = left.values[lftEntries - 1];
                 removeKeyValue(left, lftEntries - 1);
                 // add to current
