@@ -102,8 +102,8 @@ class BTree {
 
     // to traverse and get node
     public BTreeNode getNode(BTreeNode node, long key) {
-        while (!(node.children == null)) {
-            node = node.getChild()[childrenSearch(key, node.getKeys())];
+        while (!(node.getChild() == null)) {
+            node = node.children[childrenSearch(key, node.getKeys())];
         }
         return node;
     }
@@ -133,6 +133,20 @@ class BTree {
         }
         return index;
     }
+    /*
+    *return the size of array not considering zeros
+    *@params array of keys or values
+    *@return size of array (# of non-zero elements)
+    *@author safipourafsh
+    */        
+    int nodeSize(long[] keys) {
+        int size = 0;
+        for (int i=0; i<keys.length; i++) {
+          if (keys[i] != 0)
+            size++;
+        }
+        return size;
+      }
 
     BTree insert(Student student) {
         /**
