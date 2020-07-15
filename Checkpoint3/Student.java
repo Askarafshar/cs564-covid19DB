@@ -21,4 +21,9 @@ public class Student {
         this.level = level;
         this.recordId = recordId;
     }
+
+    @Override
+    public String toString() {
+        return String.format(studentId + "," + age + "," + studentName + "," + major + "," + level + "," + recordId);
+    }
 }

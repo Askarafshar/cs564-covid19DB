@@ -107,10 +107,12 @@ public class BTreeMain {
                             break;
                     }
                 }
+                s2.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
     }
 
     /**

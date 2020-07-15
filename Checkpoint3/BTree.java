@@ -5,7 +5,6 @@
  */
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -141,6 +140,7 @@ class BTree {
          * student.csv after inserting in B+Tree.
          */
         if (root == null) {
+        	root = new BTreeNode(t, true);
             root.keys[0] = student.studentId;
             root.values[0] = student.recordId;
         }
@@ -180,14 +180,20 @@ class BTree {
             insertHelper(parent, student);
         }
 
-        FileWriter writer = new FileWriter("../student.csv");
-        // Writing data to the csv file
-        writer.append(String.join(",", student));// it needs to get fixed
-        writer.append("\n");
-        // Flushing data from writer to file
-        writer.flush();
-        writer.close();
-        System.out.println("Data entered");
+        try {
+            FileWriter writer = new FileWriter("./student.csv");
+            // Writing data to the csv file
+            writer.append(String.join(",", student.toString()));// it needs to get fixed
+            writer.append("\n");
+            // Flushing data from writer to file
+            writer.flush();
+            writer.close();
+            System.out.println("Data entered");
+        }
+        catch (IOException e) {
+            System.out.println("Failed to write to student.csv.");
+            e.printStackTrace();
+        }
 
         return this;
     }
@@ -391,12 +397,15 @@ class BTree {
      * node where the given studentId record would exist. 
      * 
      * @param studentId    student ID of the record you want to parent node of
-     * @return      the parent node for the given ID
+     * @return      the parent node for the given ID, null if root is leaf node
      * @author kwalker26
      */
     private BTreeNode findParent(long studentId) {
         BTreeNode result = root;
         
+        if (root.leaf) {
+        	return null;
+        }
         // go until we are at parent of a leaf
         while (!result.getChild()[0].leaf) {
             result = result.getChild()[childrenSearch(studentId, result.getKeys())];
