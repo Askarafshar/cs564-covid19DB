@@ -122,10 +122,10 @@ class BTree {
         }
         while (start <= length) {
             mid = (start + length) / 2;
-            if (key < keys[mid] && key >= keys[mid - 1]) {
-                index = mid;
+            if (key == keys[mid]) {
+                index = mid + 1;
                 break;
-            } else if (key >= keys[mid]) {
+            } else if (key > keys[mid]) {
                 start = mid + 1;
             } else {
                 length = mid - 1;
