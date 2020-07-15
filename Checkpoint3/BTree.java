@@ -168,7 +168,7 @@ class BTree {
         BTreeNode candidate = searchLeafNode(node, studentId);
         int index = childrenSearch(studentId, candidate.keys);
         // if there is room for the key
-        if (!capacity(candidate)) {
+        if(nodeSize(candidate.keys) != candidate.keys.length) {
         	long[] canKeys = candidate.keys;
         	for (int i = nodeSize(canKeys) - 1; i >= 0; i--) {
         		if (canKeys[i] > studentId) {
