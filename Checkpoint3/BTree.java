@@ -454,7 +454,7 @@ class BTree {
         BTreeNode leftLeafNode = getLeftLeafNode(temp);
          
         while(!(leftLeafNode==null)) {
-        	for(int i = 0; i < nodeSize(leftLeafNode.getKeys()); i++) {
+        	for(int i = 0; i < nodeSize(leftLeafNode.keys); i++) {
         		listOfRecordID.add(leftLeafNode.values[i]);
         	}
         	leftLeafNode = leftLeafNode.next;
