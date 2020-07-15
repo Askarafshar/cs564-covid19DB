@@ -102,8 +102,8 @@ class BTree {
 
     // to traverse and get node
     public BTreeNode getNode(BTreeNode node, long key) {
-        while (!(node.getChild() == null)) {
-            node = node.children[childrenSearch(key, node.getKeys())];
+        while (!(node.children == null)) {
+            node = node.children[childrenSearch(key, node.keys)];
         }
         return node;
     }
@@ -454,7 +454,7 @@ class BTree {
         BTreeNode leftLeafNode = getLeftLeafNode(temp);
          
         while(!(leftLeafNode==null)) {
-        	for(int i = 0; i < nodeSize(leftLeafNode.getKeys()); i++) {
+        	for(int i = 0; i < nodeSize(leftLeafNode.keys); i++) {
         		listOfRecordID.add(leftLeafNode.values[i]);
         	}
         	leftLeafNode = leftLeafNode.next;
