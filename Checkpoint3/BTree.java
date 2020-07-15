@@ -169,12 +169,21 @@ class BTree {
         int index = childrenSearch(studentId, candidate.keys);
         // if there is room for the key
         if (!capacity(candidate)) {
-            for (int i = candidate.values.length - 2; i >= index; i--) {
-                candidate.keys[i + 1] = candidate.keys[i];
-                candidate.values[i + 1] = candidate.values[i];
-            }
-            candidate.keys[index] = studentId;
-            candidate.values[index] = recordId;
+        	long[] canKeys = candidate.keys;
+        	for (int i = nodeSize(canKeys) - 1; i >= 0; i--) {
+        		if (canKeys[i] > studentId) {
+        			// move this key index up one
+        			canKeys[i + 1] = canKeys[i];
+        			candidate.values[i + 1] = candidate.values[i];
+        		}
+        		else if (canKeys[i] < studentId) {
+        			// insert our entry at one index higher
+        			canKeys[i + 1] = studentId;
+        			candidate.values[i + 1] = recordId;
+        			break;
+        		}
+        	}
+        	candidate.setKeys(canKeys); // update node
         }
         // if the node if full we need split the node
         else {
@@ -217,7 +226,7 @@ class BTree {
      * returns true if the node is full and false otherwise
      */
     public boolean capacity(BTreeNode node) {
-        if (node.keys.length == node.values.length) {
+        if (nodeSize(node.keys) == node.values.length) {
             return true;
         }
         return false;
@@ -445,7 +454,7 @@ class BTree {
         BTreeNode leftLeafNode = getLeftLeafNode(temp);
          
         while(!(leftLeafNode==null)) {
-        	for(int i=0;i<leftLeafNode.n;i++) {
+        	for(int i = 0; i < nodeSize(leftLeafNode.getKeys()); i++) {
         		listOfRecordID.add(leftLeafNode.values[i]);
         	}
         	leftLeafNode = leftLeafNode.next;
