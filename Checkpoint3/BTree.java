@@ -102,8 +102,8 @@ class BTree {
 
     // to traverse and get node
     public BTreeNode getNode(BTreeNode node, long key) {
-        while (!(node.getChild() == null)) {
-            node = node.children[childrenSearch(key, node.getKeys())];
+        while (!(node.children == null)) {
+            node = node.children[childrenSearch(key, node.keys)];
         }
         return node;
     }
