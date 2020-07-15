@@ -133,7 +133,8 @@ class BTree {
         }
         return index;
     }
-    /*
+    
+    /** 
     *return the size of array not considering zeros
     *@params array of keys or values
     *@return size of array (# of non-zero elements)
@@ -243,7 +244,8 @@ class BTree {
         // find the node with the student
         studentNode = searchLeafNode(root, studentId);
         long[] studKeys = studentNode.getKeys();
-        for (int i = 0; i < studKeys.length; i++) {
+        int numStudKeys = nodeSize(studKeys);
+        for (int i = 0; i < numStudKeys; i++) {
             if (studentId == studKeys[i]) {
                 // we found the student entry to delete
                 studIndex = i;
@@ -263,16 +265,17 @@ class BTree {
         // 2 - delete leaves node requiring more values, borrow from neighbor
         // 3 - delete leaves node requiring more values, merge with neighbor
 
-        if (studentNode.n < t && root != studentNode) {
+        if (numStudKeys < t && root != studentNode) {
             // cases 2/3: invalid
             BTreeNode parent = findParent(studentId);
+            int numParentKeys = nodeSize(parent.getKeys());
             int studNodeIndex = -1;
             boolean borrow = false;
             boolean merge = false;
 
             // try case 2 - attempt borrowing
             studNodeIndex = childrenSearch(studentId, parent.getKeys());
-            if (studNodeIndex < parent.n) {
+            if (studNodeIndex < numParentKeys) {
                 // sibling to right exists so try to borrow
                 BTreeNode sibling = parent.getChild()[studNodeIndex + 1];
                 borrow = borrowHelper(studentNode, parent, sibling, studNodeIndex, true);
@@ -331,15 +334,15 @@ class BTree {
     private void removeKeyValue(BTreeNode node, int index) {
         long[] keys = node.getKeys();
         long[] values = node.values;
-        for (int i = index; i < keys.length - 1; i++) {
+        int numEntries = nodeSize(keys);
+        for (int i = index; i < numEntries - 1; i++) {
             keys[i] = keys[i + 1];
             values[i] = values[i + 1];
         }
-        keys[keys.length - 1] = 0;
-        values[values.length - 1] = 0;
+        keys[numEntries - 1] = 0;
+        values[numEntries - 1] = 0;
         node.setKeys(keys);
         node.values = values;
-        node.n = node.n - 1;
     }
 
     /**
@@ -353,22 +356,22 @@ class BTree {
     private boolean borrowHelper(BTreeNode left, BTreeNode parent, BTreeNode right, int borrowerIndex, boolean LfromR) {
         if (LfromR) {
             // sibling = right
-            if (right.n > t) {
+            if (nodeSize(right.getKeys()) > t) {
                 // sibling can lend a value
                 long tempKey, tempVal;
                 long[] currKeys = left.getKeys();
                 long[] currVals = left.values;
+                int lftEntries = nodeSize(currKeys);
                 long[] parKeys = parent.getKeys();
                 // remove from sibling
                 tempKey = right.getKeys()[0];
                 tempVal = right.values[0];
                 removeKeyValue(right, 0);
                 // add to current
-                currKeys[left.n] = tempKey;
-                currVals[left.n] = tempVal;
+                currKeys[lftEntries] = tempKey;
+                currVals[lftEntries] = tempVal;
                 left.setKeys(currKeys);
                 left.values = currVals;
-                left.n = left.n + 1;
                 // update parent
                 parKeys[borrowerIndex] = tempKey;
                 parent.setKeys(parKeys);
@@ -377,16 +380,17 @@ class BTree {
         } 
         else {
             // sibling = left
-            if (left.n > t) {
+            int lftEntries = nodeSize(left.getKeys());
+            if (lftEntries > t) {
                 // sibling can lend a value
                 long tempKey, tempVal;
                 long[] currKeys = right.getKeys();
                 long[] currVals = right.values;
                 long[] parKeys = parent.getKeys();
                 // remove from sibling
-                tempKey = left.getKeys()[left.n - 1];
-                tempVal = left.values[left.n - 1];
-                removeKeyValue(left, left.n - 1);
+                tempKey = left.getKeys()[lftEntries - 1];
+                tempVal = left.values[lftEntries - 1];
+                removeKeyValue(left, lftEntries - 1);
                 // add to current
                 for (int i = currKeys.length - 1; i > 0; i--) {
                     currKeys[i] = currKeys[i - 1];
@@ -396,7 +400,6 @@ class BTree {
                 currVals[0] = tempVal;
                 right.setKeys(currKeys);
                 right.values = currVals;
-                right.n = right.n + 1;
                 // update parent
                 parKeys[borrowerIndex - 1] = tempKey;
                 parent.setKeys(parKeys);
@@ -421,8 +424,8 @@ class BTree {
         	return null;
         }
         // go until we are at parent of a leaf
-        while (!result.getChild()[0].leaf) {
-            result = result.getChild()[childrenSearch(studentId, result.getKeys())];
+        while (!result.children[0].leaf) {
+            result = result.children[childrenSearch(studentId, result.getKeys())];
         }
 
         return result;
