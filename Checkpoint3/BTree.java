@@ -169,6 +169,8 @@ class BTree {
         	root = new BTreeNode(t, true);
             root.keys[0] = student.studentId;
             root.values[0] = student.recordId;
+            root.n++;
+            return this;
         }
         return insertHelper(root, student);
     }
