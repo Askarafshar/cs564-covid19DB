@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -49,17 +48,11 @@ public class BTreeMain {
         
         System.out.println(studentsDB.size()); // TODO - remove debug KW
 
-//        for (Student s : studentsDB) {
-//            bTree.insert(s);
-//            System.out.println(bTree.print());
-//        }
-        for (int i = 0; i < 4; i++) {
-        	bTree.insert(studentsDB.get(i));
+        for (Student s : studentsDB) {
+            bTree.insert(s);
+            System.out.println(bTree.print());
         }
-        
-        System.out.println(bTree.print());
-        
-        bTree.delete(99354543);
+
         
         System.out.println(bTree.print());
         
