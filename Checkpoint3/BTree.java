@@ -192,10 +192,13 @@ class BTree {
                 newRoot.children[0] = candidate;
             }
             BTreeNode newNode = new BTreeNode(t, true);
-            newNode.keys[0] = studentId;
+            int mid = (candidate.keys.length)/2;
+            newNode.keys[0] = candidate.keys[mid];
+            if(index >= mid) {index = childrenSearch(studentId, newNode.keys);}
+            else {index = childrenSearch(studentId, candidate.keys);}
             for (int i = index; i < candidate.keys.length; i++) {
-                newNode.keys[i - index + 1] = candidate.keys[i];
-                candidate.keys[i] = 0;
+              newNode.keys[i - index + 1] = candidate.keys[i];
+              candidate.keys[i] = 0;
             }
             newNode.next = candidate.next;
             candidate.next = newNode;
