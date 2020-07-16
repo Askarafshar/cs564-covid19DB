@@ -100,7 +100,7 @@ class BTree {
         }
     }
 
-    /* 
+    /**
      * to traverse and get node
      * @param a node and a key
      * @return a node contains the key
@@ -114,7 +114,7 @@ class BTree {
     }
 
    
-     /* 
+     /**
      * search to consider the internal nodes index.
      * @param an array and a key
      * @return a index 
