@@ -49,10 +49,19 @@ public class BTreeMain {
         
         System.out.println(studentsDB.size()); // TODO - remove debug KW
 
-        for (Student s : studentsDB) {
-            bTree.insert(s);
-            System.out.println(bTree.print());
+//        for (Student s : studentsDB) {
+//            bTree.insert(s);
+//            System.out.println(bTree.print());
+//        }
+        for (int i = 0; i < 4; i++) {
+        	bTree.insert(studentsDB.get(i));
         }
+        
+        System.out.println(bTree.print());
+        
+        bTree.delete(99354543);
+        
+        System.out.println(bTree.print());
         
         /** Start reading the operations now from input file*/
 //        try {
