@@ -100,7 +100,12 @@ class BTree {
         }
     }
 
-    // to traverse and get node
+    /**
+     * to traverse and get node
+     * @param a node and a key
+     * @return a node contains the key
+     * @author safipourafsh
+     */
     public BTreeNode getNode(BTreeNode node, long key) {
         while (!(node.children == null)) {
             node = node.children[childrenSearch(key, node.keys)];
@@ -108,7 +113,13 @@ class BTree {
         return node;
     }
 
-    // search to consider the internal nodes too.
+   
+     /**
+     * search to consider the internal nodes index.
+     * @param an array and a key
+     * @return a index 
+     * @author safipourafsh
+     */
     public int childrenSearch(long key, long[] keys) {
         int left = 0;
         int right = keys.length - 1;
@@ -158,6 +169,8 @@ class BTree {
         	root = new BTreeNode(t, true);
             root.keys[0] = student.studentId;
             root.values[0] = student.recordId;
+            root.n++;
+            return this;
         }
         insertHelper(root, student);
         return this;
