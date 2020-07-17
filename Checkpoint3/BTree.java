@@ -188,6 +188,7 @@ class BTree {
         		return null;
         	}
         	else {
+        		// split
                 int mid = (node.keys.length)/2;
                 newChild = new BTreeNode(t, true);
                 // find where to insert new key
@@ -250,6 +251,7 @@ class BTree {
     		    		if (node.children[i] == null) {
     		    			//add newChild to it, set newChild null and return
     		    			node.children[i] = newChild;
+    		    			node.keys[i - 1] = newChild.keys[0];
     		    			newChild = null;
     		    			return newChild;
     		    		}
@@ -352,7 +354,7 @@ class BTree {
     boolean delete(long studentId) {
         BTreeNode deletedNode = null;
         
-        if (root != null) {
+        if (root == null) {
         	System.out.println("Tree is empty");
             return false; // empty tree
         }

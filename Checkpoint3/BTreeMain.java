@@ -45,32 +45,18 @@ public class BTreeMain {
             System.out.println("Failed to clear student.csv prior to inserting data in B+Tree. File may contain duplicate entries after this run.");
             e1.printStackTrace();
         }
-        
-        System.out.println(studentsDB.size()); // TODO - remove debug KW
 
         List<Long> verify;
-        boolean exit = false;
         
+        // add all students to tree
         for (Student s : studentsDB) {
             bTree.insert(s);
-            verify = bTree.print();
-            System.out.println(verify);
-            for (int i = 0; i < verify.size(); i++) {
-            	for (int j = i + 1; j < verify.size(); j++) {
-            		if (verify.get(i) > verify.get(j)) {
-            			System.out.println("Not sorted");
-            			System.out.println("i =" + i);
-            			System.out.println("j =" + j);
-            			i = verify.size();
-            			exit = true;
-            			break;
-            		}
-            	}
-            }
-            if (exit) break;
         }
         verify = bTree.print();
         
+        for (int i = 7; i < 8; i++) {
+        	bTree.delete(studentsDB.get(i).studentId);
+        }
         
         /** Start reading the operations now from input file*/
 //        try {
