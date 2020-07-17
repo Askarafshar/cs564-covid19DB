@@ -159,67 +159,133 @@ class BTree {
             root.keys[0] = student.studentId;
             root.values[0] = student.recordId;
         }
-        return insertHelper(root, student);
+        insertHelper(root, student);
+        return this;
     }
 
-    BTree insertHelper(BTreeNode node, Student student) {
-        long studentId = student.studentId;
-        long recordId = student.recordId;
-        BTreeNode candidate = searchLeafNode(node, studentId);
-        int index = childrenSearch(studentId, candidate.keys);
-        // if there is room for the key
-        if(nodeSize(candidate.keys) != candidate.keys.length) {
-        	long[] canKeys = candidate.keys;
-        	for (int i = nodeSize(canKeys) - 1; i >= 0; i--) {
-        		if (canKeys[i] > studentId) {
-        			// move this key index up one
-        			canKeys[i + 1] = canKeys[i];
-        			candidate.values[i + 1] = candidate.values[i];
-        		}
-        		else if (canKeys[i] < studentId) {
-        			// insert our entry at one index higher
-        			canKeys[i + 1] = studentId;
-        			candidate.values[i + 1] = recordId;
-        			break;
-        		}
+    private BTreeNode insertHelper(BTreeNode node, Student student) {
+        BTreeNode newChild = null;
+        if (node.leaf) {
+        	// space for new entry
+        	if (nodeSize(node.keys) < node.keys.length) {
+        		leafInsert(node, student);
+        		return null;
         	}
-        	candidate.setKeys(canKeys); // update node
+        	else {
+        		// split into 2 leaf nodes
+        		//BTreeNode newChild = new BTreeNode(t, true);
+        		// leave lower t values in original node
+        		//for (int i = t; i < node.keys.length; i++) {
+        		//	newChild.keys[i - t] = node.keys[t];
+        		//	newChild.values[i - t] = node.values[t];
+        		//}
+        		//node.next = newChild;	// set sibling pointer
+        		//return newChild;
+                
+                int mid = (node.keys.length)/2;
+                newChild = new BTreeNode(t, true);
+                long keyUp = node.keys[mid];
+                for(int i=mid; i < node.keys.length; i++) {
+                    newChild.keys[i-mid] = node.keys[i];
+                    newChild.values[i-mid] = node.values[i];
+                    node.keys[i] = 0;
+                    node.values[i] = 0;
+                    node.n--;
+                    newChild.n++;
+                }
+                newChild.next = node.next;
+                node.next = newChild;
+                //now we have two leaf nodes, we need a new root node.
+                BTreeNode newRoot = new BTreeNode(t, false);
+                newRoot.keys[0] = keyUp;
+                newRoot.children[0] = node;
+                newRoot.children[1] = newChild;
+                //search for the leafnode and insert the key-values
+                //insertIntoLeafNode(searchLeafNode(node, student.studentId), student.studentId, student.recordId);
+                leafInsert(searchLeafNode(node, student.studentId), student);
+                return newRoot;
+        	}
         }
-        // if the node if full we need split the node
+        // not a leaf
         else {
-            if (candidate == this.root) {
-                BTreeNode newRoot = new BTreeNode(t, true);
-                newRoot.children[0] = candidate;
-            }
-            BTreeNode newNode = new BTreeNode(t, true);
-            newNode.keys[0] = studentId;
-            for (int i = index; i < candidate.keys.length; i++) {
-                newNode.keys[i - index + 1] = candidate.keys[i];
-                candidate.keys[i] = 0;
-            }
-            newNode.next = candidate.next;
-            candidate.next = newNode;
-
-            BTreeNode parent = findParent(studentId);
-            insertHelper(parent, student);
+        	// find subtree
+    		int childIndex = childrenSearch(student.studentId, node.keys);
+    		 newChild = insertHelper(node.children[childIndex], student);	// recurse
+    		if (newChild == null) {
+    			return newChild;
+    		}
+    		else {
+    			// if node has space 
+    			if (!childrenFull(node)) {
+    				for (int i = 0; i < node.children.length; i++) {
+    		    		if (node.children[i] == null) {
+    		    			//add newChild to it, set newChild null and return
+    		    			node.children[i] = newChild;
+    		    			newChild = null;
+    		    			return newChild;
+    		    		}
+    		    	}
+    			}
+    			// no space, split internal node
+    			else {
+                    // split node here
+                    BTreeNode rightNode = splitInternal(node);
+                    BTreeNode leftNode = new BTreeNode(t , false);
+                    int mid = (nodeSize(node.keys)) / 2;
+                    long keyUp = node.keys[mid];
+                    for(int i=0; i<nodeSize(node.keys); i++) {
+                        if (i < mid) {
+                            leftNode.keys[i] = node.keys[i];
+                        } else {
+                            rightNode.keys[i] = node.keys[i];
+                        }
+                   }
+    				
+    				if (node == root) {
+    					BTreeNode newRoot = new BTreeNode(t, false);
+    					newRoot.children[0] = node;
+    					root = newRoot;
+    				}
+    				return null;
+    			}
+    		}
+        		
+        			
         }
-
-        try {
-            FileWriter writer = new FileWriter("./student.csv");
-            // Writing data to the csv file
-            writer.append(String.join(",", student.toString()));// it needs to get fixed
-            writer.append("\n");
-            // Flushing data from writer to file
-            writer.flush();
-            writer.close();
-            System.out.println("Data entered");
+		return null;
+    }
+    
+    BTreeNode splitInternal(BTreeNode nodeToSplit) {
+        int midIndex = nodeSize(nodeToSplit.keys) / 2;
+        BTreeNode newRightNode = null;
+        for (int i = midIndex + 1; i < nodeSize(nodeToSplit.keys); ++i) {
+            newRightNode.keys[i - midIndex - 1] = nodeToSplit.keys[i];
+            nodeToSplit.keys[i] = 0;
         }
-        catch (IOException e) {
-            System.out.println("Failed to write to student.csv.");
-            e.printStackTrace();
+        for (int i = midIndex + 1; i <= nodeSize(nodeToSplit.keys); ++i) {
+            newRightNode.children[i - midIndex - 1] = nodeToSplit.children[i];
+            nodeToSplit.children[i] = null;
         }
-
-        return this;
+        nodeToSplit.keys[midIndex] = 0;
+        return newRightNode;
+      }
+    
+    void leafInsert(BTreeNode node, Student s) {
+    	long[] keys = node.keys;
+    	for (int i = nodeSize(keys) - 1; i >= 0; i--) {
+    		if (keys[i] > s.studentId) {
+    			// move this key index up one
+    			keys[i + 1] = keys[i];
+    			node.values[i + 1] = node.values[i];
+    		}
+    		else if (keys[i] < s.studentId) {
+    			// insert our entry at one index higher
+    			keys[i + 1] = s.studentId;
+    			node.values[i + 1] = s.recordId;
+    			break;
+    		}
+    	}
+    	node.keys = keys; // update node
     }
 
     /**
@@ -230,6 +296,15 @@ class BTree {
             return true;
         }
         return false;
+    }
+    
+    private boolean childrenFull(BTreeNode node) {
+    	for (int i = 0; i < node.children.length; i++) {
+    		if (node.children[i] == null) {
+    			return false;
+    		}
+    	}
+    	return true;
     }
 
     /**
@@ -687,6 +762,33 @@ class BTree {
         }
 
         return result;
+    }
+    
+    /**
+     * Traverses the tree to find the parent of a given node with its smallest key
+     * @param child
+     * @return
+     */
+    private BTreeNode findParent(BTreeNode child, long minKey) {
+    	BTreeNode result = root;
+    	
+    	if (child == root) {
+    		// root has no parent
+    		return null;
+    	}
+    	
+    	while (true) {
+    		for (int i = 0; i < 2 * t; i++) {
+    			if (result.children[i] == null) {
+    				// no more children for this node
+    				break;
+    			}
+    			if (result.children[i] == child) {
+    				return result;
+    			}
+    		}
+    		result = result.children[childrenSearch(minKey, result.getKeys())];
+    	}
     }
 
 /**
