@@ -48,13 +48,29 @@ public class BTreeMain {
         
         System.out.println(studentsDB.size()); // TODO - remove debug KW
 
+        List<Long> verify;
+        boolean exit = false;
+        
         for (Student s : studentsDB) {
             bTree.insert(s);
-            System.out.println(bTree.print());
+            verify = bTree.print();
+            System.out.println(verify);
+            for (int i = 0; i < verify.size(); i++) {
+            	for (int j = i + 1; j < verify.size(); j++) {
+            		if (verify.get(i) > verify.get(j)) {
+            			System.out.println("Not sorted");
+            			System.out.println("i =" + i);
+            			System.out.println("j =" + j);
+            			i = verify.size();
+            			exit = true;
+            			break;
+            		}
+            	}
+            }
+            if (exit) break;
         }
-
+        verify = bTree.print();
         
-        System.out.println(bTree.print());
         
         /** Start reading the operations now from input file*/
 //        try {

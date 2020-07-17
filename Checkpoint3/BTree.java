@@ -122,14 +122,14 @@ class BTree {
      */
     public int childrenSearch(long key, long[] keys) {
         int left = 0;
-        int right = keys.length - 1;
+        int right = nodeSize(keys) - 1; // was keys.length
         int mid;
         int index = -1;
         if (key < keys[left]) {
             return 0;
         }
         if (key >= keys[right]) {
-            return keys.length;
+            return nodeSize(keys);
         }
         while (left <= right) {
             mid = (left + right) / 2;
@@ -172,7 +172,10 @@ class BTree {
             root.n++;
             return this;
         }
-        insertHelper(root, student);
+        BTreeNode newRoot = insertHelper(root, student);
+        if (newRoot != null) {
+        	this.root = newRoot;
+        }
         return this;
     }
 
@@ -185,37 +188,50 @@ class BTree {
         		return null;
         	}
         	else {
-        		// split into 2 leaf nodes
-        		//BTreeNode newChild = new BTreeNode(t, true);
-        		// leave lower t values in original node
-        		//for (int i = t; i < node.keys.length; i++) {
-        		//	newChild.keys[i - t] = node.keys[t];
-        		//	newChild.values[i - t] = node.values[t];
-        		//}
-        		//node.next = newChild;	// set sibling pointer
-        		//return newChild;
-                
                 int mid = (node.keys.length)/2;
                 newChild = new BTreeNode(t, true);
-                long keyUp = node.keys[mid];
-                for(int i=mid; i < node.keys.length; i++) {
-                    newChild.keys[i-mid] = node.keys[i];
-                    newChild.values[i-mid] = node.values[i];
-                    node.keys[i] = 0;
-                    node.values[i] = 0;
-                    node.n--;
-                    newChild.n++;
+                // find where to insert new key
+                int newKeyIndex = 2 * t - 1;
+                for (int i = 0; i < node.keys.length; i++) {
+                	if (node.keys[i] > student.studentId) {
+                		newKeyIndex = i;
+                	}
                 }
+                if (newKeyIndex < t) {
+                	// add upper values to right
+                	for(int i = mid; i < node.keys.length; i++) {
+                        newChild.keys[i - mid] = node.keys[i];
+                        newChild.values[i - mid] = node.values[i];
+                        node.keys[i] = 0;
+                        node.values[i] = 0;
+                        node.n--;
+                        newChild.n++;
+                    }
+                	// new key goes into left
+                	leafInsert(searchLeafNode(node, student.studentId), student);
+                }
+                else {
+                	// add upper values to right
+                	for(int i = mid + 1; i < node.keys.length; i++) {
+                        newChild.keys[i - mid - 1] = node.keys[i];
+                        newChild.values[i - mid - 1] = node.values[i];
+                        node.keys[i] = 0;
+                        node.values[i] = 0;
+                        node.n--;
+                        newChild.n++;
+                    }
+                	// new key into right
+                	leafInsert(searchLeafNode(newChild, student.studentId), student);
+                }
+                // update pointers
                 newChild.next = node.next;
                 node.next = newChild;
+                
                 //now we have two leaf nodes, we need a new root node.
                 BTreeNode newRoot = new BTreeNode(t, false);
-                newRoot.keys[0] = keyUp;
+                newRoot.keys[0] = newChild.keys[0];
                 newRoot.children[0] = node;
                 newRoot.children[1] = newChild;
-                //search for the leafnode and insert the key-values
-                //insertIntoLeafNode(searchLeafNode(node, student.studentId), student.studentId, student.recordId);
-                leafInsert(searchLeafNode(node, student.studentId), student);
                 return newRoot;
         	}
         }
@@ -223,7 +239,7 @@ class BTree {
         else {
         	// find subtree
     		int childIndex = childrenSearch(student.studentId, node.keys);
-    		 newChild = insertHelper(node.children[childIndex], student);	// recurse
+    		newChild = insertHelper(node.children[childIndex], student);	// recurse
     		if (newChild == null) {
     			return newChild;
     		}
@@ -269,8 +285,11 @@ class BTree {
     }
     
     BTreeNode splitInternal(BTreeNode nodeToSplit) {
+    	if (nodeToSplit.leaf) {
+    		System.out.println("Trying to split leaf in internal splitter.");
+    	}
         int midIndex = nodeSize(nodeToSplit.keys) / 2;
-        BTreeNode newRightNode = null;
+        BTreeNode newRightNode = new BTreeNode(t, false);
         for (int i = midIndex + 1; i < nodeSize(nodeToSplit.keys); ++i) {
             newRightNode.keys[i - midIndex - 1] = nodeToSplit.keys[i];
             nodeToSplit.keys[i] = 0;
@@ -819,7 +838,8 @@ class BTree {
          
         while(!(leftLeafNode==null)) {
         	for(int i = 0; i < nodeSize(leftLeafNode.keys); i++) {
-        		listOfRecordID.add(leftLeafNode.values[i]);
+        		//listOfRecordID.add(leftLeafNode.values[i]);
+        		listOfRecordID.add(leftLeafNode.keys[i]);
         	}
         	leftLeafNode = leftLeafNode.next;
         }
