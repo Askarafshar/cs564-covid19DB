@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -45,82 +46,75 @@ public class BTreeMain {
             System.out.println("Failed to clear student.csv prior to inserting data in B+Tree. File may contain duplicate entries after this run.");
             e1.printStackTrace();
         }
-
-        List<Long> verify;
         
         // add all students to tree
         for (Student s : studentsDB) {
             bTree.insert(s);
         }
-        verify = bTree.print();
-        
-        for (int i = 7; i < 8; i++) {
-        	bTree.delete(studentsDB.get(i).studentId);
-        }
         
         /** Start reading the operations now from input file*/
-//        try {
-//            while (scan.hasNextLine()) {
-//                Scanner s2 = new Scanner(scan.nextLine());
-//
-//                while (s2.hasNext()) {
-//
-//                    String operation = s2.next();
-//
-//                    switch (operation) {
-//                        case "insert": {
-//
-//                            long studentId = Long.parseLong(s2.next());
-//                            String studentName = s2.next() + " " + s2.next();
-//                            String major = s2.next();
-//                            String level = s2.next();
-//                            int age = Integer.parseInt(s2.next());
-//                            long recordID;
-//                            try {
-//                                recordID = Long.parseLong(s2.next());
-//                            } catch (NoSuchElementException e) {
-//                                recordID = ++highestRID; 
-//                            }
-//
-//                            Student s = new Student(studentId, age, studentName, major, level, recordID);
-//                            bTree.insert(s);
-//
-//                            break;
-//                        }
-//                        case "delete": {
-//                            long studentId = Long.parseLong(s2.next());
-//                            boolean result = bTree.delete(studentId);
-//                            if (result)
-//                                System.out.println("Student deleted successfully.");
-//                            else
-//                                System.out.println("Student deletion failed.");
-//
-//                            break;
-//                        }
-//                        case "search": {
-//                            long studentId = Long.parseLong(s2.next());
-//                            long recordID = bTree.search(studentId);
-//                            if (recordID != -1)
-//                                System.out.println("Student exists in the database at " + recordID);
-//                            else
-//                                System.out.println("Student does not exist.");
-//                            break;
-//                        }
-//                        case "print": {
-//                            List<Long> listOfRecordID = new ArrayList<>();
-//                            listOfRecordID = bTree.print();
-//                            System.out.println("List of recordIDs in B+Tree " + listOfRecordID.toString());
-//                        }
-//                        default:
-//                            System.out.println("Wrong Operation");
-//                            break;
-//                    }
-//                }
-//                s2.close();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            while (scan.hasNextLine()) {
+                Scanner s2 = new Scanner(scan.nextLine());
+
+                while (s2.hasNext()) {
+                		
+                    String operation = s2.next();
+
+                    switch (operation) {
+                        case "insert": {
+
+                            long studentId = Long.parseLong(s2.next());
+                            String studentName = s2.next() + " " + s2.next();
+                            String major = s2.next();
+                            String level = s2.next();
+                            int age = Integer.parseInt(s2.next());
+                            long recordID;
+                            try {
+                                recordID = Long.parseLong(s2.next());
+                            } catch (NoSuchElementException e) {
+                                recordID = ++highestRID; 
+                            }
+
+                            Student s = new Student(studentId, age, studentName, major, level, recordID);
+                            bTree.insert(s);
+
+                            break;
+                        }
+                        case "delete": {
+                            long studentId = Long.parseLong(s2.next());
+                            boolean result = bTree.delete(studentId);
+                            if (result)
+                                System.out.println("Student deleted successfully.");
+                            else
+                                System.out.println("Student deletion failed.");
+
+                            break;
+                        }
+                        case "search": {
+                            long studentId = Long.parseLong(s2.next());
+                            long recordID = bTree.search(studentId);
+                            if (recordID != -1)
+                                System.out.println("Student exists in the database at " + recordID);
+                            else
+                                System.out.println("Student does not exist.");
+                            break;
+                        }
+                        case "print": {
+                            List<Long> listOfRecordID = new ArrayList<>();
+                            listOfRecordID = bTree.print();
+                            System.out.println("List of recordIDs in B+Tree " + listOfRecordID.toString());
+                        }
+                        default:
+                            System.out.println("Wrong Operation");
+                            break;
+                    }
+                }
+                s2.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
     }
 

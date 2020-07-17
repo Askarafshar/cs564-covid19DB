@@ -26,6 +26,11 @@ class BTree {
      * Number of key-value pairs allowed in the tree/the minimum degree of B+Tree
      **/
     private int t;
+    
+    /**
+     * Used by delete helper to indicate if delete was successful.
+     */
+    private boolean deleteSuccess = false;
 
     BTree(int t) {
         this.root = null;
@@ -81,11 +86,11 @@ class BTree {
             return searchLeafNode(node.children[0], studentId);
             // If the key is bigger than the last key in the node, follow its last child to
             // continue
-        } else if (studentId > node.keys[node.keys.length - 1]) {
-            return searchLeafNode(node.children[node.keys.length - 1], studentId);
+        } else if (studentId > node.keys[nodeSize(node.keys) - 1]) {
+            return searchLeafNode(node.children[nodeSize(node.keys) - 1], studentId);
         } else {
             // Use binary search to find the child to follow
-            int left = 0, right = node.keys.length - 1, mid;
+            int left = 0, right = nodeSize(node.keys) - 1, mid;
             while (left <= right) {
                 mid = (left + right) / 2;
                 if (node.keys[mid] == studentId) {
@@ -131,16 +136,25 @@ class BTree {
         if (key >= keys[right]) {
             return nodeSize(keys);
         }
-        while (left <= right) {
-            mid = (left + right) / 2;
-            if (key == keys[mid]) {
-                index = mid + 1;
-                break;
-            } else if (key > keys[mid]) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
+//        while (left <= right) {
+//            mid = (left + right) / 2;
+//            if (key == keys[mid]) { // was ==
+//                index = mid + 1;
+//                break;
+//            } else if (key > keys[mid]) {
+//                left = mid + 1;
+//            } else {
+//                right = mid - 1;
+//            }
+//        }
+        for (int i = 0; i < nodeSize(keys); i++) {
+        	if (key < keys[i]) {
+        		index  = i;
+        		break;
+        	}
+        	else {
+        		index = i + 1;
+        	}
         }
         return index;
     }
@@ -170,12 +184,27 @@ class BTree {
             root.keys[0] = student.studentId;
             root.values[0] = student.recordId;
             root.n++;
-            return this;
+        } else {
+	        BTreeNode newRoot = insertHelper(root, student);
+	        if (newRoot != null) {
+	        	this.root = newRoot;
+	        }
         }
-        BTreeNode newRoot = insertHelper(root, student);
-        if (newRoot != null) {
-        	this.root = newRoot;
+        try {
+            FileWriter writer = new FileWriter("./student.csv", true); // true enables appending
+            // Writing data to the csv file
+            writer.append(String.join(",", student.toString()));
+            writer.append("\n");
+            // Flushing data from writer to file
+            writer.flush();
+            writer.close();
+            System.out.println("Data entered into student.csv");
         }
+        catch (IOException e) {
+            System.out.println("Failed to write to student.csv.");
+            e.printStackTrace();
+        }
+
         return this;
     }
 
@@ -209,6 +238,8 @@ class BTree {
                         newChild.n++;
                     }
                 	// new key goes into left
+                	newChild.next = node.next;
+                	node.next= newChild;
                 	leafInsert(searchLeafNode(node, student.studentId), student);
                 }
                 else {
@@ -222,12 +253,10 @@ class BTree {
                         newChild.n++;
                     }
                 	// new key into right
+                	newChild.next = node.next;
+                    node.next = newChild;
                 	leafInsert(searchLeafNode(newChild, student.studentId), student);
                 }
-                // update pointers
-                newChild.next = node.next;
-                node.next = newChild;
-                
                 //now we have two leaf nodes, we need a new root node.
                 BTreeNode newRoot = new BTreeNode(t, false);
                 newRoot.keys[0] = newChild.keys[0];
@@ -356,16 +385,23 @@ class BTree {
         
         if (root == null) {
         	System.out.println("Tree is empty");
-            return false; // empty tree
+            return true; // empty tree
         }
         else {
-        	if (!deleteHelper(null, root, studentId, deletedNode)) {
-            	System.out.println("Failed to delete");
-            	return false;
-            }
+        	deleteSuccess = false;
+        	deletedNode = deleteHelper(null, root, studentId);
+        	
+        	if (deleteSuccess) {
+        		if (deletedNode != null) {
+        			// we deleted the old root, so update root
+        			this.root = deletedNode.children[0];
+        		}
+        	} 
+        	else {
+        		System.out.println("Failed to delete");
+        		return deleteSuccess;
+        	}
         }
-        
-        
 
         // attempt to delete from .csv
         try {
@@ -398,63 +434,102 @@ class BTree {
             e.printStackTrace();
         }
 
-        return true;
+        return deleteSuccess;
     }
 
     // if recursively passing deletedChild doesn't work, try making it a return value and use that at root to determine reaction
-    private boolean deleteHelper(BTreeNode parent, BTreeNode curr, long key, BTreeNode deletedChild) {
-    	boolean result = false;
+    private BTreeNode deleteHelper(BTreeNode parent, BTreeNode curr, long key) {
+    	BTreeNode deletedChild = null;
     	
     	if (curr.leaf) {
     		if (nodeSize(curr.keys) > t) {
     			// entries to spare so remove
-    			result = removeKeyValue(curr, key);
+    			deleteSuccess = removeKeyValue(curr, key);
     			deletedChild = null;
-    			return result;
+    			return deletedChild;
     		}
     		// TODO KW: currently only tries the right sibling
     		// idea to implement both, try to force code to execute twice, once with sib index as 1 less than curr, other as 1 more than
     		else {
-    			BTreeNode sibling = curr.next;
-    			if (sibling == null) {
-    				// consider case w/ null sibling and at root as child[0]; becomes important if we cannot find left sibling
-    				System.out.println("TODO KW: use of right sibling for merge/redistribute not implemented");
-    				return false;
-    			}
-    			// get index for navigating parent
-    			int sibNodeIndex = -1;
+    			// get curr node's index in parent.children
+    			int currNodeIndex = -1;
     			for (int i = 0; i < nodeSize(parent.keys); i++) {
-    				if (parent.keys[i] > sibling.keys[0]) {
+    				if (parent.keys[i] > curr.keys[0]) {
     					// parent children array index is always equal to the index of the first key greater than smallest child key
     					// i(child) = i_min(parent.key > child.key[0])
-    					sibNodeIndex = i;
+    					currNodeIndex = i;
     					break;
     				}
     			}
-    			if (sibNodeIndex == -1) {
+    			if (currNodeIndex == -1) {
     				// sibling is last child of this parent
-    				sibNodeIndex = nodeSize(parent.keys);
+    				currNodeIndex = nodeSize(parent.keys);
     			}
+    			
+    			// get sibling indices
+    			int leftSibNodeIndex = currNodeIndex - 1;
+    			int rightSibNodeIndex = currNodeIndex + 1;
+    			
+    			// setup for merge/redistribute
+    			BTreeNode sibling = curr.next;
+    			int sibIndex;
+    			boolean rightSib;
+    			if (sibling != null) {
+    				// case 1 - right sibling exists
+    				sibling = curr.next;
+    				sibIndex = rightSibNodeIndex;
+    				rightSib = true;
+    				// consider case w/ null sibling and at root as child[0]; becomes important if we cannot find left sibling
+    			} 
+    			else if (leftSibNodeIndex >= 0) {
+    				// case 2 - left sibling exists
+    				sibling = parent.children[leftSibNodeIndex];
+    				sibIndex = leftSibNodeIndex;
+    				rightSib = false;
+    			}
+    			else {
+    				System.out.println("No siblings exists for the given node");
+    				deleteSuccess = false;
+    				return null;
+    			}
+
     			if (nodeSize(sibling.keys) > t) {
     				// has extra entries so remove and redistribute
     				if (!removeKeyValue(curr, key)) {
-    					return false;
+    					deleteSuccess = false;
+    					return null;
     				}
     				redistribute(curr, sibling);
     				// update parent with new min key in right
-    				parent.keys[sibNodeIndex - 1] = sibling.keys[0];
+    				parent.keys[sibIndex - 1] = sibling.keys[0];
+    				deleteSuccess = true;
     				deletedChild = null;
-        			return true;
+        			return deletedChild;
     			}
     			else {
     				// no extra entries, merge
-    				// set deleted to rhs node TODO: currently can only be sibling
-    				deletedChild = sibling;
-    				merge(curr, sibling);	// empty right node into left node
-    				// update pointer for leaf and child array for parent
-    				curr.next = null;
-    				removeChild(parent, sibNodeIndex);
-    				return true;
+    				if (!removeKeyValue(curr, key)) {
+    					deleteSuccess = false;
+    					return null;
+    				}
+    				if (rightSib) {
+    					// merging right node into left
+    					deletedChild = sibling;
+        				merge(curr, sibling);	// empty right node into left node
+        				// update pointer for leaf and child array for parent
+        				curr.next = sibling.next;
+        				removeChild(parent, sibIndex);
+    				}
+    				else {
+    					// merging curr into left sibling
+    					deletedChild = curr;
+        				merge(sibling, curr);	// empty right node into left node
+        				// update pointer for leaf and child array for parent
+        				sibling.next = curr.next;
+        				removeChild(parent, currNodeIndex);
+    				}
+    				deleteSuccess = true;
+    				return deletedChild;
     			}
     		}
     	}
@@ -462,66 +537,137 @@ class BTree {
     	else {
     		// find subtree
     		int childIndex = childrenSearch(key, curr.keys);
-    		deleteHelper(curr, curr.children[childIndex], key, deletedChild);	// recurse
+    		deletedChild = deleteHelper(curr, curr.children[childIndex], key);	// recurse
     		if (deletedChild == null) {
-    			return true;
+    			deleteSuccess = true;
+    			return deletedChild;
     		}
     		// TODO KW: currently only tries the right sibling
     		else {
     			// remove deleted child, handled when the child is set as deletedChild
     			// test not underflow (enough entries to be a valid node)
     			if (nodeSize(curr.keys) >= t) {
+    				deleteSuccess = true;
     				deletedChild = null;
-    				return true;
+    				return deletedChild;
     			}
     			// underflow
     			else {
-    				BTreeNode sibling = curr.next;
-        			if (sibling == null) {
-        				// consider case w/ null sibling and at root as child[0]; becomes important if we cannot find left sibling
-        				System.out.println("TODO KW: use of right sibling for merge/redistribute not implemented");
-        				return false;
-        			}
-        			// get index for navigating parent
-        			int sibNodeIndex = -1;
+    				if (parent == null) {
+    					// we are at the root so there are no siblings
+    					deleteSuccess = true;
+        				deletedChild = null;
+        				return deletedChild;
+    				}
+    				// get curr node's index in parent.children
+        			int currNodeIndex = -1;
         			for (int i = 0; i < nodeSize(parent.keys); i++) {
-        				if (parent.keys[i] > sibling.keys[0]) {
+        				if (parent.keys[i] > curr.keys[0]) {
         					// parent children array index is always equal to the index of the first key greater than smallest child key
         					// i(child) = i_min(parent.key > child.key[0])
-        					sibNodeIndex = i;
+        					currNodeIndex = i;
         					break;
         				}
         			}
-        			if (sibNodeIndex == -1) {
+        			if (currNodeIndex == -1) {
         				// sibling is last child of this parent
-        				sibNodeIndex = nodeSize(parent.keys);
+        				currNodeIndex = nodeSize(parent.keys);
         			}
+        			
+        			// get sibling indices
+        			int leftSibNodeIndex = currNodeIndex - 1;
+        			int rightSibNodeIndex = currNodeIndex + 1;
+        			
+        			// setup for merge/redistribute
+        			BTreeNode sibling = curr.next;
+        			int sibIndex;
+        			boolean rightSib;
+        			if (sibling != null) {
+        				// case 1 - right sibling exists
+        				sibling = curr.next;
+        				sibIndex = rightSibNodeIndex;
+        				rightSib = true;
+        				// consider case w/ null sibling and at root as child[0]; becomes important if we cannot find left sibling
+        			} 
+        			else if (leftSibNodeIndex >= 0) {
+        				// case 2 - left sibling exists
+        				sibling = parent.children[leftSibNodeIndex];
+        				sibIndex = leftSibNodeIndex;
+        				rightSib = false;
+        			}
+        			else {
+        				System.out.println("No siblings exists for the given node");
+        				deleteSuccess = false;
+        				return null;
+        			}
+        			
         			if (nodeSize(sibling.keys) > t) {
         				// has extra entries so redistribute through parent (need to preserve children)
-        				redistributeInternal(curr, sibling);
-        				// update parent with new min key in right
-        				parent.keys[sibNodeIndex - 1] = sibling.keys[0];
-        				deletedChild = null;
-            			return true;
+        				if (rightSib) {
+        					redistributeInternal(curr, sibling);
+            				// update parent with new min key in right
+            				parent.keys[sibIndex - 1] = sibling.keys[0];
+            				deleteSuccess = true;
+            				deletedChild = null;
+                			return deletedChild;
+        				}
+        				else {
+        					redistributeInternal(sibling, curr);
+            				// update parent with new min key in right
+            				parent.keys[currNodeIndex - 1] = curr.keys[0];
+            				deleteSuccess = true;
+            				deletedChild = null;
+                			return deletedChild;
+        				}
         			}
     				// merge
         			else {
-        				// set deleted to rhs node TODO: currently can only be sibling
-        				deletedChild = sibling;
-        				// in parent pull key between children down into top of left node
-        				// left node is currently assumed to be curr
-        				curr.keys[nodeSize(curr.keys)] = parent.keys[sibNodeIndex - 1];	// -1 assumes left is always curr
-        				mergeInternal(curr, sibling); // empty right node into left node
-    					// update pointer for leaf and child array for parent
-        				curr.next = null;
-        				removeChild(parent, sibNodeIndex);
-        				return true;
+        				if (rightSib) {
+        					// set deleted to rhs node
+        					deletedChild = sibling;
+            				// in parent pull key between children down into top of left node
+            				// left node is curr
+            				curr.keys[nodeSize(curr.keys)] = parent.keys[sibIndex - 1];	// -1 assumes left is always curr
+            				mergeInternal(curr, sibling); // empty right node into left node
+        					// update pointer for leaf and child array for parent
+            				curr.next = sibling.next;
+            				removeChild(parent, sibIndex);
+            				deleteSuccess = true;
+            				return deletedChild;
+        				}
+        				else {
+        					// set deleted to rhs node
+        					deletedChild = curr;
+            				// in parent pull key between children down into top of left node
+            				// left node is sibling
+        					sibling.keys[nodeSize(sibling.keys)] = parent.keys[currNodeIndex - 1];	// -1 assumes left is always curr
+            				mergeInternal(sibling, curr); // empty right node into left node
+        					// update pointer for leaf and child array for parent
+            				sibling.next = curr.next;
+            				removeChild(parent, currNodeIndex);
+            				deleteSuccess = true;
+            				return deletedChild;
+        				}
         			}
     			}
-    				
     		}
     	}
     }
+    
+	// get index for navigating parent
+//	int sibNodeIndex = -1;
+//	for (int i = 0; i < nodeSize(parent.keys); i++) {
+//		if (parent.keys[i] > sibling.keys[0]) {
+//			// parent children array index is always equal to the index of the first key greater than smallest child key
+//			// i(child) = i_min(parent.key > child.key[0])
+//			sibNodeIndex = i;
+//			break;
+//		}
+//	}
+//	if (sibNodeIndex == -1) {
+//		// sibling is last child of this parent
+//		sibNodeIndex = nodeSize(parent.keys);
+//	}
 
     /**
      * Deletes 	key value pair from a node. 
@@ -571,7 +717,7 @@ class BTree {
     	}
     	
     	int numKeys = nodeSize(internalNode.keys);
-    	if (index > numKeys - 1 || index < -1) {
+    	if (index > numKeys || index < -1) {
     		System.out.println("Invalid index to remove child.");
     		return;
     	}
@@ -580,6 +726,7 @@ class BTree {
     		internalNode.keys[i] = internalNode.keys[i + 1];
     		internalNode.children[i] = internalNode.children[i + 1];
     	}
+    	internalNode.children[numKeys] = internalNode.children[numKeys + 1]; // shift final child down
     	if (numKeys == (2 * t - 1)) {
     		// node was full of keys
     		if (index == numKeys - 1) {
