@@ -128,7 +128,6 @@ class BTree {
     public int childrenSearch(long key, long[] keys) {
         int left = 0;
         int right = nodeSize(keys) - 1; // was keys.length
-        int mid;
         int index = -1;
         if (key < keys[left]) {
             return 0;
@@ -292,7 +291,6 @@ class BTree {
                     BTreeNode rightNode = splitInternal(node);
                     BTreeNode leftNode = new BTreeNode(t , false);
                     int mid = (nodeSize(node.keys)) / 2;
-                    long keyUp = node.keys[mid];
                     for(int i=0; i<nodeSize(node.keys); i++) {
                         if (i < mid) {
                             leftNode.keys[i] = node.keys[i];
@@ -654,21 +652,6 @@ class BTree {
     	}
     }
     
-	// get index for navigating parent
-//	int sibNodeIndex = -1;
-//	for (int i = 0; i < nodeSize(parent.keys); i++) {
-//		if (parent.keys[i] > sibling.keys[0]) {
-//			// parent children array index is always equal to the index of the first key greater than smallest child key
-//			// i(child) = i_min(parent.key > child.key[0])
-//			sibNodeIndex = i;
-//			break;
-//		}
-//	}
-//	if (sibNodeIndex == -1) {
-//		// sibling is last child of this parent
-//		sibNodeIndex = nodeSize(parent.keys);
-//	}
-
     /**
      * Deletes 	key value pair from a node. 
      * @param node
@@ -923,55 +906,6 @@ class BTree {
     	}
     }
 
-    /**
-     * Traverses the tree (starting at the root) to find the parent of the leaf 
-     * node where the given studentId record would exist. 
-     * 
-     * @param studentId    student ID of the record you want to parent node of
-     * @return      the parent node for the given ID, null if root is leaf node
-     * @author kwalker26
-     */
-    private BTreeNode findParent(long studentId) {
-        BTreeNode result = root;
-        
-        if (root.leaf) {
-        	return null;
-        }
-        // go until we are at parent of a leaf
-        while (!result.children[0].leaf) {
-            result = result.children[childrenSearch(studentId, result.getKeys())];
-        }
-
-        return result;
-    }
-    
-    /**
-     * Traverses the tree to find the parent of a given node with its smallest key
-     * @param child
-     * @return
-     */
-    private BTreeNode findParent(BTreeNode child, long minKey) {
-    	BTreeNode result = root;
-    	
-    	if (child == root) {
-    		// root has no parent
-    		return null;
-    	}
-    	
-    	while (true) {
-    		for (int i = 0; i < 2 * t; i++) {
-    			if (result.children[i] == null) {
-    				// no more children for this node
-    				break;
-    			}
-    			if (result.children[i] == child) {
-    				return result;
-    			}
-    		}
-    		result = result.children[childrenSearch(minKey, result.getKeys())];
-    	}
-    }
-
 /**
      * 
      * Prints the B+Tree's leaf node values (recordIDs).
@@ -987,8 +921,7 @@ class BTree {
          
         while(!(leftLeafNode==null)) {
         	for(int i = 0; i < nodeSize(leftLeafNode.keys); i++) {
-        		//listOfRecordID.add(leftLeafNode.values[i]);
-        		listOfRecordID.add(leftLeafNode.keys[i]);
+        		listOfRecordID.add(leftLeafNode.values[i]);
         	}
         	leftLeafNode = leftLeafNode.next;
         }
