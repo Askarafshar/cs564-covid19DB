@@ -7,30 +7,37 @@ Following steps show how to set the COVID-19 database for the CS564 finall proje
                        total_deaths BIGINT,
                        population BIGINT,
                        PRIMARY KEY (name, state));
-  CREATE TABLE cases (case_id VARCHAR(255),
+  CREATE TABLE cases (case_id BIGINT,
                       occurred_at DATE,
                       daily_deaths BIGINT,
                       confirmed BIGINT,
                       name VARCHAR(255),
                       state VARCHAR(255),
                       PRIMARY KEY (case_id));
-  CREATE TABLE socioeconomic (socio_id VARCHAR(255),
+  CREATE TABLE socioeconomic (socio_id BIGINT,
                       income VARCHAR(255),
                       life_expectancy BIGINT,
                       primary_physicians BIGINT,
                       mental_health_providers BIGINT,
                       uninsured BIGINT,
                       PRIMARY KEY (socio_id));
-  CREATE TABLE hold (socio_id VARCHAR(255),
+  CREATE TABLE hold (socio_id BIGINT,
                      name VARCHAR(255),
                      state VARCHAR(255),
-                     FOREIGN KEY (name, state) REFERENCES county(name, state),
                      PRIMARY KEY (socio_id, name, state));
-                     //If you get an error regarding foreign key constraint during load data: first SET FOREIGN_KEY_CHECKS = 0;
-                     //After you loaded data SET FOREIGN_KEY_CHECKS = 1;
-  ****************************
-  **TODO: RACE & HAS Tables.**
-  ****************************
+
+  CREATE TABLE race (race_id BIGINT,
+                     name VARCHAR(255),
+                     state VARCHAR(255),  
+                     black VARCHAR(255),
+                     alaska_native VARCHAR(255),
+                     asian VARCHAR(255),
+                     native_hawaiian VARCHAR(255),
+                     hispanic VARCHAR(255),
+                     non-hispanic_white 
+                     VARCHAR(255),
+                     PRIMARY KEY (race_id));
+
   
 4. Load .csv data into tables:
   SET GLOBAL local_infile = true;
