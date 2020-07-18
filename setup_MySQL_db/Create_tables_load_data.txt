@@ -26,7 +26,8 @@ Following steps show how to set the COVID-19 database for the CS564 finall proje
                      state VARCHAR(255),
                      FOREIGN KEY (name, state) REFERENCES county(name, state),
                      PRIMARY KEY (socio_id, name, state));
- 
+                     //If you get an error regarding foreign key constraint during load data: first SET FOREIGN_KEY_CHECKS = 0;
+                     //After you loaded data SET FOREIGN_KEY_CHECKS = 1;
   ****************************
   **TODO: RACE & HAS Tables.**
   ****************************
