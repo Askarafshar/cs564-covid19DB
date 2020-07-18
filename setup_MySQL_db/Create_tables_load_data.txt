@@ -24,8 +24,7 @@ Following steps show how to set the COVID-19 database for the CS564 finall proje
   CREATE TABLE hold (socio_id VARCHAR(255),
                      name VARCHAR(255),
                      state VARCHAR(255),
-                     FOREIGN KEY (name) REFERENCES county(name),
-                     FOREIGN KEY (state) REFERENCES county(state),
+                     FOREIGN KEY (name, state) REFERENCES county(name, state),
                      PRIMARY KEY (socio_id, name, state));
  
   ****************************
