@@ -34,7 +34,7 @@ Following steps show how to set the COVID-19 database for the CS564 finall proje
                      asian VARCHAR(255),
                      native_hawaiian VARCHAR(255),
                      hispanic VARCHAR(255),
-                     non-hispanic_white 
+                     nonHispanic_white 
                      VARCHAR(255),
                      PRIMARY KEY (race_id));
 
