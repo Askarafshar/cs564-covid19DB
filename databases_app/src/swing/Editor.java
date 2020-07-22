@@ -19,6 +19,8 @@ import javax.swing.UIManager;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
+import javax.swing.DefaultComboBoxModel;
+
 import java.awt.event.ActionListener;
 
 public class Editor extends JFrame {
@@ -162,16 +164,19 @@ public class Editor extends JFrame {
 		nameFilter.setColumns(10);
 		
 		JComboBox stateDropdown = new JComboBox();
+		stateDropdown.setModel(new DefaultComboBoxModel(new String[] {"", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"}));
 		stateDropdown.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		stateDropdown.setBounds(94, 36, 196, 25);
 		countyFilter.add(stateDropdown);
 		
 		JComboBox deathRelation = new JComboBox();
+		deathRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		deathRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		deathRelation.setBounds(368, 8, 63, 25);
 		countyFilter.add(deathRelation);
 		
 		JComboBox popRelation = new JComboBox();
+		popRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		popRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		popRelation.setBounds(368, 36, 63, 25);
 		countyFilter.add(popRelation);
@@ -220,38 +225,45 @@ public class Editor extends JFrame {
 		casesFilter.add(lblDeaths);
 		
 		JComboBox caseST_comboMM = new JComboBox();
+		caseST_comboMM.setModel(new DefaultComboBoxModel(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		caseST_comboMM.setToolTipText("");
 		caseST_comboMM.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		caseST_comboMM.setBounds(85, 8, 50, 25);
 		casesFilter.add(caseST_comboMM);
 		
 		JComboBox caseST_comboDD = new JComboBox();
+		caseST_comboDD.setModel(new DefaultComboBoxModel(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		caseST_comboDD.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		caseST_comboDD.setBounds(141, 8, 50, 25);
 		casesFilter.add(caseST_comboDD);
 		
 		JComboBox caseST_comboYYYY = new JComboBox();
+		caseST_comboYYYY.setModel(new DefaultComboBoxModel(new String[] {"", "2020"}));
 		caseST_comboYYYY.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		caseST_comboYYYY.setBounds(196, 8, 75, 25);
 		casesFilter.add(caseST_comboYYYY);
 		
 		JComboBox caseEND_comboMM = new JComboBox();
+		caseEND_comboMM.setModel(new DefaultComboBoxModel(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		caseEND_comboMM.setToolTipText("");
 		caseEND_comboMM.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		caseEND_comboMM.setBounds(85, 56, 50, 25);
 		casesFilter.add(caseEND_comboMM);
 		
 		JComboBox caseEND_comboDD = new JComboBox();
+		caseEND_comboDD.setModel(new DefaultComboBoxModel(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		caseEND_comboDD.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		caseEND_comboDD.setBounds(141, 56, 50, 25);
 		casesFilter.add(caseEND_comboDD);
 		
 		JComboBox caseEND_comboYYYY = new JComboBox();
+		caseEND_comboYYYY.setModel(new DefaultComboBoxModel(new String[] {"", "2020"}));
 		caseEND_comboYYYY.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		caseEND_comboYYYY.setBounds(196, 56, 75, 25);
 		casesFilter.add(caseEND_comboYYYY);
 		
 		JComboBox case_caseRelation = new JComboBox();
+		case_caseRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		case_caseRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		case_caseRelation.setBounds(381, 8, 63, 25);
 		casesFilter.add(case_caseRelation);
@@ -263,6 +275,7 @@ public class Editor extends JFrame {
 		casesFilter.add(case_numCase);
 		
 		JComboBox case_deathRelation = new JComboBox();
+		case_deathRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		case_deathRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		case_deathRelation.setBounds(381, 56, 63, 25);
 		casesFilter.add(case_deathRelation);
@@ -278,6 +291,7 @@ public class Editor extends JFrame {
 		raceFilter.setLayout(null);
 		
 		JComboBox race_blkRelation = new JComboBox();
+		race_blkRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_blkRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_blkRelation.setBounds(153, 0, 63, 25);
 		raceFilter.add(race_blkRelation);
@@ -289,6 +303,7 @@ public class Editor extends JFrame {
 		raceFilter.add(race_blkPercent);
 		
 		JComboBox race_amerInRelation = new JComboBox();
+		race_amerInRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_amerInRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_amerInRelation.setBounds(153, 33, 63, 25);
 		raceFilter.add(race_amerInRelation);
@@ -300,6 +315,7 @@ public class Editor extends JFrame {
 		raceFilter.add(race_amerInPercent);
 		
 		JComboBox race_asiRelation = new JComboBox();
+		race_asiRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_asiRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_asiRelation.setBounds(153, 63, 63, 25);
 		raceFilter.add(race_asiRelation);
@@ -311,6 +327,7 @@ public class Editor extends JFrame {
 		raceFilter.add(race_asiPercent);
 		
 		JComboBox race_hawRelation = new JComboBox();
+		race_hawRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_hawRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_hawRelation.setBounds(478, 0, 63, 25);
 		raceFilter.add(race_hawRelation);
@@ -322,6 +339,7 @@ public class Editor extends JFrame {
 		raceFilter.add(race_hawPercent);
 		
 		JComboBox race_hispRelation = new JComboBox();
+		race_hispRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_hispRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_hispRelation.setBounds(478, 33, 63, 25);
 		raceFilter.add(race_hispRelation);
@@ -333,6 +351,7 @@ public class Editor extends JFrame {
 		raceFilter.add(race_hispPercent);
 		
 		JComboBox race_whiRelation = new JComboBox();
+		race_whiRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_whiRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_whiRelation.setBounds(478, 63, 63, 25);
 		raceFilter.add(race_whiRelation);
@@ -417,6 +436,7 @@ public class Editor extends JFrame {
 		socioFilter.add(soc_incomeText);
 		
 		JComboBox soc_incomeRelation = new JComboBox();
+		soc_incomeRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		soc_incomeRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		soc_incomeRelation.setBounds(120, 0, 63, 25);
 		socioFilter.add(soc_incomeRelation);
@@ -428,6 +448,7 @@ public class Editor extends JFrame {
 		socioFilter.add(soc_lifeText);
 		
 		JComboBox soc_lifeRelation = new JComboBox();
+		soc_lifeRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		soc_lifeRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		soc_lifeRelation.setBounds(120, 30, 63, 25);
 		socioFilter.add(soc_lifeRelation);
@@ -439,6 +460,7 @@ public class Editor extends JFrame {
 		socioFilter.add(soc_uninText);
 		
 		JComboBox soc_uninRelation = new JComboBox();
+		soc_uninRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		soc_uninRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		soc_uninRelation.setBounds(120, 62, 63, 25);
 		socioFilter.add(soc_uninRelation);
@@ -450,6 +472,7 @@ public class Editor extends JFrame {
 		socioFilter.add(soc_mentalText);
 		
 		JComboBox soc_mentalRelation = new JComboBox();
+		soc_mentalRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		soc_mentalRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		soc_mentalRelation.setBounds(444, 6, 63, 25);
 		socioFilter.add(soc_mentalRelation);
@@ -461,6 +484,7 @@ public class Editor extends JFrame {
 		socioFilter.add(soc_primaryText);
 		
 		JComboBox soc_primaryRelation = new JComboBox();
+		soc_primaryRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		soc_primaryRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		soc_primaryRelation.setBounds(444, 41, 63, 25);
 		socioFilter.add(soc_primaryRelation);
@@ -597,17 +621,20 @@ public class Editor extends JFrame {
 		newEntryPanel.add(btnAddEntry);
 		
 		JComboBox new_comboMM = new JComboBox();
+		new_comboMM.setModel(new DefaultComboBoxModel(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		new_comboMM.setToolTipText("");
 		new_comboMM.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		new_comboMM.setBounds(154, 18, 50, 25);
 		newEntryPanel.add(new_comboMM);
 		
 		JComboBox new_comboDD = new JComboBox();
+		new_comboDD.setModel(new DefaultComboBoxModel(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		new_comboDD.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		new_comboDD.setBounds(210, 18, 50, 25);
 		newEntryPanel.add(new_comboDD);
 		
 		JComboBox new_comboYYYY = new JComboBox();
+		new_comboYYYY.setModel(new DefaultComboBoxModel(new String[] {"", "2020"}));
 		new_comboYYYY.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		new_comboYYYY.setBounds(265, 18, 75, 25);
 		newEntryPanel.add(new_comboYYYY);
@@ -692,23 +719,29 @@ public class Editor extends JFrame {
 		modifyEntryPanel.add(btnSaveChanges);
 		
 		JComboBox mod_comboMM = new JComboBox();
+		mod_comboMM.setModel(new DefaultComboBoxModel(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		mod_comboMM.setToolTipText("");
 		mod_comboMM.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		mod_comboMM.setBounds(440, 6, 50, 25);
 		modifyEntryPanel.add(mod_comboMM);
 		
 		JComboBox mod_comboDD = new JComboBox();
+		mod_comboDD.setModel(new DefaultComboBoxModel(new String[] {"", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		mod_comboDD.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		mod_comboDD.setBounds(495, 6, 50, 25);
 		modifyEntryPanel.add(mod_comboDD);
 		
 		JComboBox mod_comboYYYY = new JComboBox();
+		mod_comboYYYY.setModel(new DefaultComboBoxModel(new String[] {"", "2020"}));
 		mod_comboYYYY.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		mod_comboYYYY.setBounds(550, 6, 75, 25);
 		modifyEntryPanel.add(mod_comboYYYY);
 		
 		
-		// actions
+		//------------------------------------------------------------
+		//------------------- ACTIONS --------------------------------
+		//------------------------------------------------------------
+		
 		//------------------- EDITOR VIEW ----------------------------
 		// go to user screen on logout
 		btnLogout.addActionListener(new ActionListener() {
@@ -720,8 +753,22 @@ public class Editor extends JFrame {
 		// open modify tab within editor screen
 		btnModifyEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// TODO
+				// need to grab the selected record from the table and populate
+				// the previous fields on the modify screen with its current
+				// data
+				
 				CardLayout c = (CardLayout)updatePanel.getLayout();
 				c.show(updatePanel, "MODIFY");
+			}
+		});
+		// save modified tuple
+		btnSaveChanges.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				// update the previously selected tuple to have the attribute 
+				// values as set in the new fields for modify
+				// then update table
 			}
 		});
 		// open new tab within editor screen
@@ -729,6 +776,22 @@ public class Editor extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout c = (CardLayout)updatePanel.getLayout();
 				c.show(updatePanel, "NEW");
+			}
+		});
+		// inserts a new record into the db
+		btnAddEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				// grab inputs to the add fields and use those to enter
+				// a new tuple in the database
+			}
+		});
+		// removes a record
+		btnDeleteEntry.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				// get selected entry in the table and delete it from
+				// the database, then refresh the table
 			}
 		});
 		
@@ -766,6 +829,24 @@ public class Editor extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout c = (CardLayout)filterPanel.getLayout();
 				c.show(filterPanel, "SOCIO");
+			}
+		});
+		// apply current filters
+		btnApplyFilter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO
+				// this button press should cause the program to fetch the current
+				// entries into the current filter screen. it should then use these
+				// arguments to construct a query to send to the database. and lastly
+				// update the table to reflect the given query
+			}
+		});
+		// remove current filters
+		btnClearFilter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				// this should cause the program to reset the filter fields and 
+				// get the unfiltered version of the database table
 			}
 		});
 		
