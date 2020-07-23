@@ -1,5 +1,13 @@
 package swing;
 
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -48,11 +56,14 @@ public class Editor extends JFrame {
 	private JTextField soc_uninText;
 	private JTextField soc_mentalText;
 	private JTextField soc_primaryText;
+	
 
+	 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 		} catch (Throwable e) {
@@ -69,11 +80,20 @@ public class Editor extends JFrame {
 			}
 		});
 	}
-
+		
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
 	 */
-	public Editor() {
+	public Editor() throws SQLException {
+		
+		//builds connection
+		ArrayList c = new ArrayList();
+		c = CommonMethods.getCounties("Wisconsin");
+		System.out.println(c);
+		String d = CommonMethods.getStateName("Dane");
+		System.out.println(d);
+		
 		// instantiate all compoenents
 		setTitle("Covid-19 Database");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
