@@ -21,7 +21,7 @@ class DBConnection {
 		}
 		try {
 			String databasePrefix = "covid19";// Name of the database.
-			String netID = "YOUR USER"; // User ID by which you connect to the db. Mine is 'askar' Like in ->mysql -u
+			String netID = "YOUR ID"; // User ID by which you connect to the db. Mine is 'askar' Like in ->mysql -u
 										  // askar -p
 			String hostName = "localhost";
 			String databaseURL = "jdbc:mysql://" + hostName + "/" + databasePrefix + "?autoReconnect=true&useSSL=false";

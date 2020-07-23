@@ -46,18 +46,10 @@ class CommonMethods {
 			ResultSet rst = dbc.executeQuery("SELECT name FROM county WHERE state='"+state+"'");
 			ResultSetMetaData metaData = rst.getMetaData();
     		int columns = metaData.getColumnCount();
-    		//ArrayList columnNames = new ArrayList();
-    		//ArrayList data = new ArrayList();
-    		
-    		//for (int i=1;i<=columns;i++) {
-    		//	columnNames.add(metaData.getColumnName(i));
-    		//}
-			ArrayList row = new ArrayList(columns);
 			while (rst.next()) {
 				for (int i=1; i<= columns; i++) {
-					row.add(rst.getObject(i));
+					counties.add(rst.getObject(i));
     			}
-				counties.add(row);
 			}
 			dbc.close();
 		} catch (SQLException e) {

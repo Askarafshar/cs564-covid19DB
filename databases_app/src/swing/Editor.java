@@ -91,6 +91,7 @@ public class Editor extends JFrame {
 		ArrayList c = new ArrayList();
 		c = CommonMethods.getCounties("Wisconsin");
 		System.out.println(c);
+		
 		String d = CommonMethods.getStateName("Dane");
 		System.out.println(d);
 		
