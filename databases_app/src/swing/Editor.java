@@ -30,6 +30,7 @@ import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 
 import java.awt.event.ActionListener;
+import javax.swing.JTable;
 
 public class Editor extends JFrame {
 
@@ -56,6 +57,8 @@ public class Editor extends JFrame {
 	private JTextField soc_uninText;
 	private JTextField soc_mentalText;
 	private JTextField soc_primaryText;
+	private JTable userTable;
+	private JTable editorTable;
 	
 
 	 
@@ -112,14 +115,6 @@ public class Editor extends JFrame {
 		btnEditorLogin.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnEditorLogin.setBounds(0, 123, 99, 23);
 		UserPanel.add(btnEditorLogin);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 158, 631, 249);
-		UserPanel.add(scrollPane);
-		
-		JList userList = new JList();
-		scrollPane.setViewportView(userList);
-		userList.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		
 		JButton btnCounty = new JButton("County");
 		btnCounty.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -555,6 +550,14 @@ public class Editor extends JFrame {
 		btnClearFilter.setBounds(426, 121, 98, 26);
 		UserPanel.add(btnClearFilter);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 158, 634, 249);
+		UserPanel.add(scrollPane);
+		
+		userTable = new JTable();
+		scrollPane.setViewportView(userTable);
+		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		JPanel EditorPanel = new JPanel();
 		contentPanel.add(EditorPanel, "EDITOR");
 		EditorPanel.setLayout(null);
@@ -574,16 +577,6 @@ public class Editor extends JFrame {
 		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnLogout.setBounds(529, 384, 105, 23);
 		EditorPanel.add(btnLogout);
-		
-		JScrollPane scrollTable = new JScrollPane();
-		scrollTable.setBounds(0, 157, 634, 216);
-		EditorPanel.add(scrollTable);
-		
-		// this list will display all database entries for a given county
-		JList editorList = new JList();
-		editorList.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		scrollTable.setViewportView(editorList);
-		editorList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JLabel lblSelectedCounty = new JLabel("Selected County:");
 		lblSelectedCounty.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -757,6 +750,13 @@ public class Editor extends JFrame {
 		mod_comboYYYY.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		mod_comboYYYY.setBounds(550, 6, 75, 25);
 		modifyEntryPanel.add(mod_comboYYYY);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(0, 157, 634, 225);
+		EditorPanel.add(scrollPane_1);
+		
+		editorTable = new JTable();
+		scrollPane_1.setViewportView(editorTable);
 		
 		
 		//------------------------------------------------------------
