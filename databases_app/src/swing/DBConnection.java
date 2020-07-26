@@ -26,7 +26,7 @@ class DBConnection {
 										  // askar -p
 			String hostName = "localhost";
 			String databaseURL = "jdbc:mysql://" + hostName + "/" + databasePrefix + "?autoReconnect=true&useSSL=false";
-			String password = "YOR PASS"; // please enter your own password
+			String password = "YOUR PASS"; // please enter your own password
 
 			conn = DriverManager.getConnection(databaseURL, netID, password);
 			stmt = conn.createStatement();

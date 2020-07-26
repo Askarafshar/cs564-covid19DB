@@ -13,6 +13,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 
@@ -898,6 +900,30 @@ public class Editor extends JFrame {
 					if(!name.isEmpty() & !state.isEmpty() & !pop.isEmpty() & !death.isEmpty()) {
 						query = ("SELECT * FROM county WHERE name='"+name+"' AND state='"+state+"'"
 								+" AND population"+popR+""+pop+" AND total_deaths"+deathR+""+death+"");
+					}else if(name.isEmpty() & !state.isEmpty() & !pop.isEmpty() & !death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE state='"+state+"'"
+								+" AND population"+popR+""+pop+" AND total_deaths"+deathR+""+death+"");
+					}else if(!name.isEmpty() & state.isEmpty() & !pop.isEmpty() & !death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE name='"+name+"' AND "
+								+" AND population"+popR+""+pop+" AND total_deaths"+deathR+""+death+"");
+					}else if(!name.isEmpty() & !state.isEmpty() & pop.isEmpty() & !death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE name='"+name+"' AND state='"+state+"'"
+								+" AND total_deaths"+deathR+""+death+"");
+					}else if(!name.isEmpty() & !state.isEmpty() & !pop.isEmpty() & death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE name='"+name+"' AND state='"+state+"'"
+								+" AND population"+popR+""+pop+" ");
+					}else if(!name.isEmpty() & !state.isEmpty() & pop.isEmpty() & death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE state='"+state+"' AND name='"+name+"'");
+					}else if(!name.isEmpty() & state.isEmpty() & pop.isEmpty() & !death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE name='"+name+"' AND total_deaths"+deathR+"'"+death+"'");
+					}else if(!name.isEmpty() & state.isEmpty() & pop.isEmpty() & death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE name='"+name+"'");
+					}else if(name.isEmpty() & !state.isEmpty() & pop.isEmpty() & death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE state='"+state+"'");
+					}else if(name.isEmpty() & state.isEmpty() & !pop.isEmpty() & death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE population"+popR+""+pop+"");
+					}else if(name.isEmpty() & state.isEmpty() & pop.isEmpty() & !death.isEmpty()) {
+						query = ("SELECT * FROM county WHERE total_deaths"+deathR+""+death+"");
 					}else {
 						query = query = "SELECT * FROM county";
 					}
@@ -924,6 +950,12 @@ public class Editor extends JFrame {
 						//AND occurred_at > "+stYY+"-"+stMM+"-"+stDD+" AND occurred_at < "+enYY+"-"+enMM+"-"+enDD+"
 						// AND occurred_at BETWEEN "+stYY+"-"+stMM+"-"+stDD+" AND "+enYY+"-"+enMM+"-"+enDD+"
 						//one of these two should work fine, but they donen't, 
+					}else if(!numCase.isEmpty() & !numDeaths.isEmpty() & stYY.isEmpty() & enYY.isEmpty()) {
+						query = ("SELECT * FROM cases WHERE confirmed"+numCaseR+" "+numCase+" AND daily_deaths"+numDeathsR+""+numDeaths+"");
+					}else if(numCase.isEmpty() & !numDeaths.isEmpty() & stYY.isEmpty() & enYY.isEmpty()) {
+						query = ("SELECT * FROM cases WHERE daily_deaths"+numDeathsR+""+numDeaths+"");
+					}else if(!numCase.isEmpty() & numDeaths.isEmpty() & stYY.isEmpty() & enYY.isEmpty()) {
+						query = ("SELECT * FROM cases WHERE confirmed"+numCaseR+" "+numCase+"");
 					}else {
 						query = "SELECT * FROM cases";
 					}
@@ -948,7 +980,38 @@ public class Editor extends JFrame {
 					if(!blk.isEmpty() & !amerIn.isEmpty() & !asi.isEmpty() & !haw.isEmpty() & !hisp.isEmpty() & !whi.isEmpty()) {
 						query = ("SELECT * FROM race WHERE black"+blkR+" "+blk+" AND alaska_native"+amerInR+""+amerIn+""
 								+ " AND asian"+asiR+""+asi+" AND native_hawaiian"+hawR+""+haw+" AND hispanic"+hispR+""+hisp+" AND nonHispanic_white"+whiR+""+whi+"");
-					}else {
+					}else if(blk.isEmpty() & !amerIn.isEmpty() & !asi.isEmpty() & !haw.isEmpty() & !hisp.isEmpty() & !whi.isEmpty()){
+						query = ("SELECT * FROM race WHERE alaska_native"+amerInR+""+amerIn+""
+								+ " AND asian"+asiR+""+asi+" AND native_hawaiian"+hawR+""+haw+" AND hispanic"+hispR+""+hisp+" AND nonHispanic_white"+whiR+""+whi+"");
+					}else if(!blk.isEmpty() & amerIn.isEmpty() & !asi.isEmpty() & !haw.isEmpty() & !hisp.isEmpty() & !whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE black"+blkR+" "+blk+"AND asian"+asiR+""+asi+""
+								+ " AND native_hawaiian"+hawR+""+haw+" AND hispanic"+hispR+""+hisp+" AND nonHispanic_white"+whiR+""+whi+"");
+					}else if(!blk.isEmpty() & !amerIn.isEmpty() & asi.isEmpty() & !haw.isEmpty() & !hisp.isEmpty() & !whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE black"+blkR+" "+blk+" AND alaska_native"+amerInR+""+amerIn+""
+								+ " AND native_hawaiian"+hawR+""+haw+" AND hispanic"+hispR+""+hisp+" AND nonHispanic_white"+whiR+""+whi+"");
+					}else if(!blk.isEmpty() & !amerIn.isEmpty() & !asi.isEmpty() & haw.isEmpty() & !hisp.isEmpty() & !whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE black"+blkR+" "+blk+" AND alaska_native"+amerInR+""+amerIn+""
+								+ " AND asian"+asiR+""+asi+" AND hispanic"+hispR+""+hisp+" AND nonHispanic_white"+whiR+""+whi+"");
+					}else if(!blk.isEmpty() & !amerIn.isEmpty() & !asi.isEmpty() & !haw.isEmpty() & hisp.isEmpty() & !whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE black"+blkR+" "+blk+" AND alaska_native"+amerInR+""+amerIn+""
+								+ " AND asian"+asiR+""+asi+" AND native_hawaiian"+hawR+""+haw+" AND nonHispanic_white"+whiR+""+whi+"");
+					}else if(!blk.isEmpty() & !amerIn.isEmpty() & !asi.isEmpty() & !haw.isEmpty() & !hisp.isEmpty() & whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE black"+blkR+" "+blk+" AND alaska_native"+amerInR+""+amerIn+""
+								+ " AND asian"+asiR+""+asi+" AND native_hawaiian"+hawR+""+haw+" AND hispanic"+hispR+""+hisp+"");
+					}else if(!blk.isEmpty() & amerIn.isEmpty() & asi.isEmpty() & haw.isEmpty() & hisp.isEmpty() & whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE black"+blkR+" "+blk+"");
+					}else if(blk.isEmpty() & !amerIn.isEmpty() & asi.isEmpty() & haw.isEmpty() & hisp.isEmpty() & whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE alaska_native"+amerInR+""+amerIn+"");
+					}else if(blk.isEmpty() & amerIn.isEmpty() & !asi.isEmpty() & haw.isEmpty() & hisp.isEmpty() & whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE asian"+asiR+""+asi+"");
+					}else if(blk.isEmpty() & amerIn.isEmpty() & asi.isEmpty() & !haw.isEmpty() & hisp.isEmpty() & whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE native_hawaiian"+hawR+""+haw+"");
+					}else if(blk.isEmpty() & amerIn.isEmpty() & asi.isEmpty() & haw.isEmpty() & !hisp.isEmpty() & whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE hispanic"+hispR+""+hisp+"");
+					}else if(blk.isEmpty() & amerIn.isEmpty() & asi.isEmpty() & haw.isEmpty() & hisp.isEmpty() & !whi.isEmpty()) {
+						query = ("SELECT * FROM race WHERE nonHispanic_white"+whiR+""+whi+"");
+					}
+					else {
 						query = ("SELECT * FROM race");
 					}
 					
@@ -971,6 +1034,16 @@ public class Editor extends JFrame {
 					if(!income.isEmpty() & !life_exp.isEmpty() & !unin.isEmpty() & !mental.isEmpty() & !primary.isEmpty()) {
 						query = ("SELECT * FROM socioeconomic WHERE income"+incomeR+" "+income+" AND life_expectancy"+life_expR+""+life_exp+""
 								+ " AND uninsured"+uninR+""+unin+" AND mental_health_providers"+mentalR+""+mental+" AND primary_physicians"+primaryR+""+primary+"");
+					}else if(!income.isEmpty() & life_exp.isEmpty() & unin.isEmpty() & mental.isEmpty() & primary.isEmpty()) {
+						query = ("SELECT * FROM socioeconomic WHERE income"+incomeR+""+income+"");
+					}else if(income.isEmpty() & !life_exp.isEmpty() & unin.isEmpty() & mental.isEmpty() & primary.isEmpty()) {
+						query = ("SELECT * FROM socioeconomic WHERE life_expectancy"+life_expR+"'"+life_exp+"'");
+					}else if(income.isEmpty() & life_exp.isEmpty() & !unin.isEmpty() & mental.isEmpty() & primary.isEmpty()) {
+						query = ("SELECT * FROM socioeconomic WHERE uninsured"+uninR+""+unin+"");
+					}else if(income.isEmpty() & life_exp.isEmpty() & unin.isEmpty() & !mental.isEmpty() & primary.isEmpty()) {
+						query = ("SELECT * FROM socioeconomic WHERE mental_health_providers"+mentalR+""+mental+"");
+					}else if(income.isEmpty() & life_exp.isEmpty() & unin.isEmpty() & mental.isEmpty() & !primary.isEmpty()) {
+						query = ("SELECT * FROM socioeconomic WHERE primary_physicians"+primaryR+""+primary+"");
 					}else {
 						query = "SELECT * FROM socioeconomic";
 						}
