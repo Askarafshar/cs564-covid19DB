@@ -217,25 +217,29 @@ public class Editor extends JFrame {
 		lblSelectFieldsTo.setBounds(575, 12, 155, 16);
 		countyFilter.add(lblSelectFieldsTo);
 		
-		JCheckBox chckbxName = new JCheckBox("Name");
-		chckbxName.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		chckbxName.setBounds(744, 9, 112, 24);
-		countyFilter.add(chckbxName);
+		JCheckBox retName_cnty = new JCheckBox("Name");
+		retName_cnty.setSelected(true);
+		retName_cnty.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retName_cnty.setBounds(744, 9, 112, 24);
+		countyFilter.add(retName_cnty);
 		
-		JCheckBox chckbxState = new JCheckBox("State");
-		chckbxState.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		chckbxState.setBounds(744, 32, 112, 24);
-		countyFilter.add(chckbxState);
+		JCheckBox returnState_cnty = new JCheckBox("State");
+		returnState_cnty.setSelected(true);
+		returnState_cnty.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnState_cnty.setBounds(744, 32, 112, 24);
+		countyFilter.add(returnState_cnty);
 		
-		JCheckBox chckbxTotalDeaths = new JCheckBox("Total Deaths");
-		chckbxTotalDeaths.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		chckbxTotalDeaths.setBounds(744, 56, 112, 24);
-		countyFilter.add(chckbxTotalDeaths);
+		JCheckBox returnDeaths_cnty = new JCheckBox("Total Deaths");
+		returnDeaths_cnty.setSelected(true);
+		returnDeaths_cnty.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnDeaths_cnty.setBounds(744, 56, 112, 24);
+		countyFilter.add(returnDeaths_cnty);
 		
-		JCheckBox chckbxPopulation = new JCheckBox("Population");
-		chckbxPopulation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		chckbxPopulation.setBounds(860, 8, 112, 24);
-		countyFilter.add(chckbxPopulation);
+		JCheckBox returnPop_cnty = new JCheckBox("Population");
+		returnPop_cnty.setSelected(true);
+		returnPop_cnty.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnPop_cnty.setBounds(860, 8, 112, 24);
+		countyFilter.add(returnPop_cnty);
 
 		JPanel casesFilter = new JPanel();
 		filterPanel.add(casesFilter, "CASES");
@@ -335,6 +339,47 @@ public class Editor extends JFrame {
 		case_numDeaths.setColumns(10);
 		case_numDeaths.setBounds(456, 59, 114, 20);
 		casesFilter.add(case_numDeaths);
+		
+		JLabel lblSelectFieldsTo_1 = new JLabel("Select fields to be returned:");
+		lblSelectFieldsTo_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSelectFieldsTo_1.setBounds(578, 4, 155, 16);
+		casesFilter.add(lblSelectFieldsTo_1);
+		
+		JCheckBox returnDeaths_cases = new JCheckBox("Deaths");
+		returnDeaths_cases.setSelected(true);
+		returnDeaths_cases.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnDeaths_cases.setBounds(747, 48, 112, 24);
+		casesFilter.add(returnDeaths_cases);
+		
+		JCheckBox retDate_cases = new JCheckBox("Date");
+		retDate_cases.setSelected(true);
+		retDate_cases.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retDate_cases.setBounds(747, 24, 112, 24);
+		casesFilter.add(retDate_cases);
+		
+		JCheckBox retID_cases = new JCheckBox("Case ID");
+		retID_cases.setSelected(true);
+		retID_cases.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retID_cases.setBounds(747, 1, 112, 24);
+		casesFilter.add(retID_cases);
+		
+		JCheckBox returnCases_cases = new JCheckBox("New Cases");
+		returnCases_cases.setSelected(true);
+		returnCases_cases.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnCases_cases.setBounds(863, 0, 112, 24);
+		casesFilter.add(returnCases_cases);
+		
+		JCheckBox retName_cases = new JCheckBox("County Name");
+		retName_cases.setSelected(true);
+		retName_cases.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retName_cases.setBounds(863, 24, 112, 24);
+		casesFilter.add(retName_cases);
+		
+		JCheckBox retState_cases = new JCheckBox("State");
+		retState_cases.setSelected(true);
+		retState_cases.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retState_cases.setBounds(863, 48, 112, 24);
+		casesFilter.add(retState_cases);
 
 		JPanel raceFilter = new JPanel();
 		filterPanel.add(raceFilter, "RACE");
@@ -343,137 +388,196 @@ public class Editor extends JFrame {
 		JComboBox race_blkRelation = new JComboBox();
 		race_blkRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_blkRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		race_blkRelation.setBounds(153, 0, 63, 25);
+		race_blkRelation.setBounds(139, 1, 63, 25);
 		raceFilter.add(race_blkRelation);
 
 		race_blkPercent = new JTextField();
 		race_blkPercent.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_blkPercent.setColumns(10);
-		race_blkPercent.setBounds(222, 3, 63, 20);
+		race_blkPercent.setBounds(208, 4, 63, 20);
 		raceFilter.add(race_blkPercent);
 
 		JComboBox race_amerInRelation = new JComboBox();
 		race_amerInRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_amerInRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		race_amerInRelation.setBounds(153, 33, 63, 25);
+		race_amerInRelation.setBounds(139, 34, 63, 25);
 		raceFilter.add(race_amerInRelation);
 
 		race_amerInPercent = new JTextField();
 		race_amerInPercent.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_amerInPercent.setColumns(10);
-		race_amerInPercent.setBounds(222, 37, 63, 20);
+		race_amerInPercent.setBounds(208, 38, 63, 20);
 		raceFilter.add(race_amerInPercent);
 
 		JComboBox race_asiRelation = new JComboBox();
 		race_asiRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_asiRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		race_asiRelation.setBounds(153, 63, 63, 25);
+		race_asiRelation.setBounds(139, 64, 63, 25);
 		raceFilter.add(race_asiRelation);
 
 		race_asiPercent = new JTextField();
 		race_asiPercent.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_asiPercent.setColumns(10);
-		race_asiPercent.setBounds(222, 66, 63, 20);
+		race_asiPercent.setBounds(208, 67, 63, 20);
 		raceFilter.add(race_asiPercent);
 
 		JComboBox race_hawRelation = new JComboBox();
 		race_hawRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_hawRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		race_hawRelation.setBounds(478, 0, 63, 25);
+		race_hawRelation.setBounds(414, 1, 63, 25);
 		raceFilter.add(race_hawRelation);
 
 		race_hawPercent = new JTextField();
 		race_hawPercent.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_hawPercent.setColumns(10);
-		race_hawPercent.setBounds(553, 3, 63, 20);
+		race_hawPercent.setBounds(489, 4, 63, 20);
 		raceFilter.add(race_hawPercent);
 
 		JComboBox race_hispRelation = new JComboBox();
 		race_hispRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_hispRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		race_hispRelation.setBounds(478, 33, 63, 25);
+		race_hispRelation.setBounds(414, 34, 63, 25);
 		raceFilter.add(race_hispRelation);
 
 		race_hispPercent = new JTextField();
 		race_hispPercent.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_hispPercent.setColumns(10);
-		race_hispPercent.setBounds(553, 36, 63, 20);
+		race_hispPercent.setBounds(489, 37, 63, 20);
 		raceFilter.add(race_hispPercent);
 
 		JComboBox race_whiRelation = new JComboBox();
 		race_whiRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		race_whiRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		race_whiRelation.setBounds(478, 63, 63, 25);
+		race_whiRelation.setBounds(414, 64, 63, 25);
 		raceFilter.add(race_whiRelation);
 
 		race_whiPercent = new JTextField();
 		race_whiPercent.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		race_whiPercent.setColumns(10);
-		race_whiPercent.setBounds(553, 66, 63, 20);
+		race_whiPercent.setBounds(489, 67, 63, 20);
 		raceFilter.add(race_whiPercent);
 
 		JLabel lblBlack = new JLabel("Black");
 		lblBlack.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblBlack.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblBlack.setBounds(0, 4, 141, 16);
+		lblBlack.setBounds(0, 10, 135, 16);
 		raceFilter.add(lblBlack);
 
 		JLabel lblAlaskan = new JLabel("American Indian/Alaskan");
 		lblAlaskan.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblAlaskan.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblAlaskan.setBounds(0, 37, 141, 16);
+		lblAlaskan.setBounds(0, 43, 135, 16);
 		raceFilter.add(lblAlaskan);
 
 		JLabel lblAsian = new JLabel("Asian");
 		lblAsian.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblAsian.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblAsian.setBounds(0, 67, 141, 16);
+		lblAsian.setBounds(0, 73, 135, 16);
 		raceFilter.add(lblAsian);
 
 		JLabel lblNativeHawaiian = new JLabel("Native Hawaiian");
 		lblNativeHawaiian.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNativeHawaiian.setBounds(362, 4, 90, 16);
+		lblNativeHawaiian.setBounds(298, 5, 90, 16);
 		raceFilter.add(lblNativeHawaiian);
 
 		JLabel lblHispanic = new JLabel("Hispanic");
 		lblHispanic.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblHispanic.setBounds(362, 37, 55, 16);
+		lblHispanic.setBounds(298, 38, 55, 16);
 		raceFilter.add(lblHispanic);
 
 		JLabel lblNonhispanicWhite = new JLabel("Non-Hispanic White");
 		lblNonhispanicWhite.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNonhispanicWhite.setBounds(362, 67, 111, 16);
+		lblNonhispanicWhite.setBounds(298, 68, 111, 16);
 		raceFilter.add(lblNonhispanicWhite);
 
 		JLabel label = new JLabel("%");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		label.setBounds(287, 4, 13, 16);
+		label.setBounds(273, 5, 13, 16);
 		raceFilter.add(label);
 
 		JLabel label_1 = new JLabel("%");
 		label_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		label_1.setBounds(287, 67, 13, 16);
+		label_1.setBounds(273, 68, 13, 16);
 		raceFilter.add(label_1);
 
 		JLabel label_2 = new JLabel("%");
 		label_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		label_2.setBounds(287, 37, 13, 16);
+		label_2.setBounds(273, 38, 13, 16);
 		raceFilter.add(label_2);
 
 		JLabel label_3 = new JLabel("%");
 		label_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		label_3.setBounds(616, 4, 18, 16);
+		label_3.setBounds(552, 5, 18, 16);
 		raceFilter.add(label_3);
 
 		JLabel label_4 = new JLabel("%");
 		label_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		label_4.setBounds(616, 37, 18, 16);
+		label_4.setBounds(552, 38, 18, 16);
 		raceFilter.add(label_4);
 
 		JLabel label_5 = new JLabel("%");
 		label_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		label_5.setBounds(616, 67, 18, 16);
+		label_5.setBounds(552, 68, 18, 16);
 		raceFilter.add(label_5);
+		
+		JLabel lblSelectFieldsTo_1_1 = new JLabel("Select fields to be returned:");
+		lblSelectFieldsTo_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSelectFieldsTo_1_1.setBounds(569, 4, 155, 16);
+		raceFilter.add(lblSelectFieldsTo_1_1);
+		
+		JCheckBox retBlack_race = new JCheckBox("Black");
+		retBlack_race.setSelected(true);
+		retBlack_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retBlack_race.setBounds(738, 1, 112, 24);
+		raceFilter.add(retBlack_race);
+		
+		JCheckBox retNative_race = new JCheckBox("Native/Alaskan");
+		retNative_race.setSelected(true);
+		retNative_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retNative_race.setBounds(738, 24, 112, 24);
+		raceFilter.add(retNative_race);
+		
+		JCheckBox returnAsian_race = new JCheckBox("Asian");
+		returnAsian_race.setSelected(true);
+		returnAsian_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnAsian_race.setBounds(738, 48, 112, 24);
+		raceFilter.add(returnAsian_race);
+		
+		JCheckBox retnHWhite_race = new JCheckBox("White");
+		retnHWhite_race.setSelected(true);
+		retnHWhite_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retnHWhite_race.setBounds(854, 48, 112, 24);
+		raceFilter.add(retnHWhite_race);
+		
+		JCheckBox retHispanic_race = new JCheckBox("Hispanic");
+		retHispanic_race.setSelected(true);
+		retHispanic_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retHispanic_race.setBounds(854, 24, 112, 24);
+		raceFilter.add(retHispanic_race);
+		
+		JCheckBox returnHaw_race = new JCheckBox("Hawaiian");
+		returnHaw_race.setSelected(true);
+		returnHaw_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnHaw_race.setBounds(854, 0, 112, 24);
+		raceFilter.add(returnHaw_race);
+		
+		JCheckBox retCounty_race = new JCheckBox("County Name");
+		retCounty_race.setSelected(true);
+		retCounty_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retCounty_race.setBounds(622, 24, 112, 24);
+		raceFilter.add(retCounty_race);
+		
+		JCheckBox retState_race = new JCheckBox("State");
+		retState_race.setSelected(true);
+		retState_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retState_race.setBounds(622, 45, 112, 24);
+		raceFilter.add(retState_race);
+		
+		JCheckBox retID_race = new JCheckBox("Race ID");
+		retID_race.setSelected(true);
+		retID_race.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		retID_race.setBounds(622, 65, 112, 24);
+		raceFilter.add(retID_race);
 
 		JPanel socioFilter = new JPanel();
 		filterPanel.add(socioFilter, "SOCIO");
@@ -573,6 +677,47 @@ public class Editor extends JFrame {
 		label_6.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		label_6.setBounds(186, 4, 55, 16);
 		socioFilter.add(label_6);
+		
+		JLabel lblSelectFieldsTo_1_1_1 = new JLabel("<html>Select fields to be returned:</html>");
+		lblSelectFieldsTo_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSelectFieldsTo_1_1_1.setBounds(633, 3, 99, 61);
+		socioFilter.add(lblSelectFieldsTo_1_1_1);
+		
+		JCheckBox returnID_socio = new JCheckBox("Socio ID");
+		returnID_socio.setSelected(true);
+		returnID_socio.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnID_socio.setBounds(746, 4, 112, 24);
+		socioFilter.add(returnID_socio);
+		
+		JCheckBox returnIncome_socio = new JCheckBox("Income");
+		returnIncome_socio.setSelected(true);
+		returnIncome_socio.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnIncome_socio.setBounds(746, 27, 112, 24);
+		socioFilter.add(returnIncome_socio);
+		
+		JCheckBox returnLife_socio = new JCheckBox("Life Expenctancy");
+		returnLife_socio.setSelected(true);
+		returnLife_socio.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		returnLife_socio.setBounds(746, 51, 112, 24);
+		socioFilter.add(returnLife_socio);
+		
+		JCheckBox returnUninsured_socio = new JCheckBox("Uninsured");
+		returnUninsured_socio.setSelected(true);
+		returnUninsured_socio.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnUninsured_socio.setBounds(862, 51, 112, 24);
+		socioFilter.add(returnUninsured_socio);
+		
+		JCheckBox returnMental_socio = new JCheckBox("Mental Providers");
+		returnMental_socio.setSelected(true);
+		returnMental_socio.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		returnMental_socio.setBounds(862, 27, 112, 24);
+		socioFilter.add(returnMental_socio);
+		
+		JCheckBox returnPhysicians_socio = new JCheckBox("Physicians");
+		returnPhysicians_socio.setSelected(true);
+		returnPhysicians_socio.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		returnPhysicians_socio.setBounds(862, 3, 112, 24);
+		socioFilter.add(returnPhysicians_socio);
 
 		JButton btnApplyFilter = new JButton("Apply Filter");
 		btnApplyFilter.setFont(new Font("Tahoma", Font.PLAIN, 12));
