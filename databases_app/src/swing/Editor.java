@@ -211,6 +211,31 @@ public class Editor extends JFrame {
 		popFilter.setColumns(10);
 		popFilter.setBounds(443, 38, 114, 20);
 		countyFilter.add(popFilter);
+		
+		JLabel lblSelectFieldsTo = new JLabel("Select fields to be returned:");
+		lblSelectFieldsTo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSelectFieldsTo.setBounds(575, 12, 155, 16);
+		countyFilter.add(lblSelectFieldsTo);
+		
+		JCheckBox chckbxName = new JCheckBox("Name");
+		chckbxName.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		chckbxName.setBounds(744, 9, 112, 24);
+		countyFilter.add(chckbxName);
+		
+		JCheckBox chckbxState = new JCheckBox("State");
+		chckbxState.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		chckbxState.setBounds(744, 32, 112, 24);
+		countyFilter.add(chckbxState);
+		
+		JCheckBox chckbxTotalDeaths = new JCheckBox("Total Deaths");
+		chckbxTotalDeaths.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		chckbxTotalDeaths.setBounds(744, 56, 112, 24);
+		countyFilter.add(chckbxTotalDeaths);
+		
+		JCheckBox chckbxPopulation = new JCheckBox("Population");
+		chckbxPopulation.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		chckbxPopulation.setBounds(860, 8, 112, 24);
+		countyFilter.add(chckbxPopulation);
 
 		JPanel casesFilter = new JPanel();
 		filterPanel.add(casesFilter, "CASES");
