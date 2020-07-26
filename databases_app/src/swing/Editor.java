@@ -899,7 +899,7 @@ public class Editor extends JFrame {
 						query = ("SELECT * FROM county WHERE name='"+name+"' AND state='"+state+"'"
 								+" AND population"+popR+""+pop+" AND total_deaths"+deathR+""+death+"");
 					}else {
-						query = query = "SELECT * FROM county";
+						query = "SELECT * FROM county";
 					}
 					
 					userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
