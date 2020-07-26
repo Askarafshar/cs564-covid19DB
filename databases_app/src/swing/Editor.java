@@ -97,7 +97,7 @@ public class Editor extends JFrame {
 		// instantiate all compoenents
 		setTitle("Covid-19 Database");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 660, 456);
+		setBounds(100, 100, 1000, 700);
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPanel);
@@ -114,22 +114,22 @@ public class Editor extends JFrame {
 
 		JButton btnCounty = new JButton("County");
 		btnCounty.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnCounty.setBounds(82, 0, 115, 26);
+		btnCounty.setBounds(103, 0, 115, 26);
 		UserPanel.add(btnCounty);
 
 		JButton btnCases = new JButton("Cases");
 		btnCases.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnCases.setBounds(229, 0, 115, 26);
+		btnCases.setBounds(325, 0, 115, 26);
 		UserPanel.add(btnCases);
 
 		JButton btnRace = new JButton("Race");
 		btnRace.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnRace.setBounds(375, 0, 115, 26);
+		btnRace.setBounds(580, 0, 115, 26);
 		UserPanel.add(btnRace);
 
 		JButton btnSocioeconomic = new JButton("Socioeconomic");
 		btnSocioeconomic.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnSocioeconomic.setBounds(519, 0, 115, 26);
+		btnSocioeconomic.setBounds(847, 0, 115, 26);
 		UserPanel.add(btnSocioeconomic);
 
 		JLabel lblFilterBy = new JLabel("Filter by:");
@@ -139,7 +139,7 @@ public class Editor extends JFrame {
 		UserPanel.add(lblFilterBy);
 
 		JPanel filterPanel = new JPanel();
-		filterPanel.setBounds(0, 30, 634, 88);
+		filterPanel.setBounds(0, 30, 974, 88);
 		UserPanel.add(filterPanel);
 		filterPanel.setLayout(new CardLayout(0, 0));
 
@@ -550,16 +550,16 @@ public class Editor extends JFrame {
 
 		JButton btnApplyFilter = new JButton("Apply Filter");
 		btnApplyFilter.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnApplyFilter.setBounds(536, 121, 98, 26);
+		btnApplyFilter.setBounds(864, 121, 98, 26);
 		UserPanel.add(btnApplyFilter);
 
 		JButton btnClearFilter = new JButton("Clear Filter");
 		btnClearFilter.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnClearFilter.setBounds(426, 121, 98, 26);
+		btnClearFilter.setBounds(754, 121, 98, 26);
 		UserPanel.add(btnClearFilter);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 158, 634, 249);
+		scrollPane.setBounds(0, 158, 974, 493);
 		UserPanel.add(scrollPane);
 
 		userTable = new JTable();
@@ -578,12 +578,12 @@ public class Editor extends JFrame {
 
 		JButton btnDeleteEntry = new JButton("Delete Entry");
 		btnDeleteEntry.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnDeleteEntry.setBounds(0, 384, 105, 23);
+		btnDeleteEntry.setBounds(0, 628, 105, 23);
 		EditorPanel.add(btnDeleteEntry);
 
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnLogout.setBounds(529, 384, 105, 23);
+		btnLogout.setBounds(869, 628, 105, 23);
 		EditorPanel.add(btnLogout);
 
 		JLabel lblSelectedCounty = new JLabel("Selected County:");
@@ -593,11 +593,11 @@ public class Editor extends JFrame {
 
 		JButton btnModifyEntry = new JButton("Modify Entry");
 		btnModifyEntry.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnModifyEntry.setBounds(266, 385, 105, 23);
+		btnModifyEntry.setBounds(461, 628, 105, 23);
 		EditorPanel.add(btnModifyEntry);
 
 		JPanel updatePanel = new JPanel();
-		updatePanel.setBounds(0, 23, 634, 133);
+		updatePanel.setBounds(0, 23, 974, 133);
 		EditorPanel.add(updatePanel);
 		updatePanel.setLayout(new CardLayout(0, 0));
 
@@ -766,7 +766,7 @@ public class Editor extends JFrame {
 		modifyEntryPanel.add(mod_comboYYYY);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(0, 157, 634, 225);
+		scrollPane_1.setBounds(0, 157, 974, 459);
 		EditorPanel.add(scrollPane_1);
 
 		editorTable = new JTable();
