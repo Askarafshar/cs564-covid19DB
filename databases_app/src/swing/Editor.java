@@ -37,6 +37,7 @@ import javax.swing.DefaultComboBoxModel;
 import java.util.*;
 import java.awt.event.ActionListener;
 import javax.swing.JTable;
+import javax.swing.JCheckBox;
 
 public class Editor extends JFrame {
 
@@ -109,7 +110,7 @@ public class Editor extends JFrame {
 
 		JButton btnEditorLogin = new JButton("Editor Login");
 		btnEditorLogin.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnEditorLogin.setBounds(0, 123, 99, 23);
+		btnEditorLogin.setBounds(10, 123, 99, 23);
 		UserPanel.add(btnEditorLogin);
 
 		JButton btnCounty = new JButton("County");
@@ -119,12 +120,12 @@ public class Editor extends JFrame {
 
 		JButton btnCases = new JButton("Cases");
 		btnCases.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnCases.setBounds(325, 0, 115, 26);
+		btnCases.setBounds(350, 0, 115, 26);
 		UserPanel.add(btnCases);
 
 		JButton btnRace = new JButton("Race");
 		btnRace.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnRace.setBounds(580, 0, 115, 26);
+		btnRace.setBounds(594, 0, 115, 26);
 		UserPanel.add(btnRace);
 
 		JButton btnSocioeconomic = new JButton("Socioeconomic");
@@ -565,6 +566,22 @@ public class Editor extends JFrame {
 		userTable = new JTable();
 		scrollPane.setViewportView(userTable);
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		JCheckBox enableCounty = new JCheckBox("");
+		enableCounty.setBounds(78, 0, 21, 24);
+		UserPanel.add(enableCounty);
+		
+		JCheckBox enableCases = new JCheckBox("");
+		enableCases.setBounds(328, 0, 21, 24);
+		UserPanel.add(enableCases);
+		
+		JCheckBox enableRace = new JCheckBox("");
+		enableRace.setBounds(567, 0, 21, 24);
+		UserPanel.add(enableRace);
+		
+		JCheckBox enableSocio = new JCheckBox("");
+		enableSocio.setBounds(818, 2, 21, 24);
+		UserPanel.add(enableSocio);
 
 		JPanel EditorPanel = new JPanel();
 		contentPanel.add(EditorPanel, "EDITOR");
@@ -1171,5 +1188,4 @@ public class Editor extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 		}
 	}
-
 }
