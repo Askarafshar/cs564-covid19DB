@@ -801,6 +801,17 @@ public class Editor extends JFrame {
 				// update the previously selected tuple to have the attribute
 				// values as set in the new fields for modify
 				// then update table
+				int row = cases.getSelectedRow();
+				String cell = cases.getModel().getValueAt(row,0).toString();
+				try {
+					String query = "update cases set name ='"+countyList.getSelectedItem().toString()+"', occurred_at = '"+mod_comboMM.getSelectedItem().toString()+ mod_comboDD.getSelectedItem().toString()+ mod_comboYYYY.getSelectedItem().toString()+"', confirmed = '"+txtNewCases_mod.getText()+"', daily_deaths = '"+txtNewDeaths_mod.getText()+"' where case_id ="+cell;
+					DBConnection connection = new DBConnection();
+					PreparedStatement pst = connection.preparedStatement(query);
+					pst.execute();
+					JOptionPane.showMessageDialog(null, "Record Updated!"); 
+				}catch (Exception eUpdate) {
+					JOptionPane.showMessageDialog(null, eUpdate);
+				}	
 			}
 		});
 		// open new tab within editor screen
@@ -816,6 +827,29 @@ public class Editor extends JFrame {
 				// TODO
 				// grab inputs to the add fields and use those to enter
 				// a new tuple in the database
+				try {
+					String query = "insert into cases (occurred_at, daily_deaths, confirmed, name) values (?,?,?,?)";
+					DBConnection connection = new DBConnection();
+					PreparedStatement pst = connection.preparedStatement(query);
+					String occDay = new_comboDD.getSelectedItem().toString();
+					String occMonth = new_comboMM.getSelectedItem().toString();
+					String occYear = new_comboYYYY.getSelectedItem().toString();
+					String occValue = occDay+occMonth+occYear;
+					String countyValue = countyList.getSelectedItem().toString();
+					pst.setString(1, occValue);
+					pst.setString(2, txtNewDeaths.getText());
+					pst.setString(3, txtNewCases.getText());
+					pst.setString(4, countyValue);
+					pst.execute();
+					JOptionPane.showMessageDialog(null, "Record Inserted!"); 	
+					txtNewDeaths.setText("");  
+					txtNewCases.setText(""); 
+					updateTable();//we need to create it
+					pst.close();
+					
+				}catch (Exception eInsert) {
+					JOptionPane.showMessageDialog(null, eInsert);
+				}
 			}
 		});
 		// removes a record
@@ -824,6 +858,20 @@ public class Editor extends JFrame {
 				// TODO
 				// get selected entry in the table and delete it from
 				// the database, then refresh the table
+				int row = cases.getSelectedRow();
+				String cell = cases.getModel().getValueAt(row,0).toString();
+				String query = "delete from case where case_id =" + cell;
+				try {
+					DBConnection connection = new DBConnection();
+					PreparedStatement pst = connection.preparedStatement(query);
+					pst.execute();
+					JOptionPane.showMessageDialog(null, "Record Deleted!"); 
+					updateTable();//we need to create it
+					pst.close();
+					
+				}catch (Exception eDelete) {
+					JOptionPane.showMessageDialog(null, eDelete); 
+				}
 			}
 		});
 
