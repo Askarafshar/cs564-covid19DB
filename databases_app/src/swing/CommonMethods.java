@@ -1,9 +1,10 @@
 package swing;
 
 import java.util.*;
-import java.util.List;
 import java.awt.*;
 import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 class CommonMethods {
 	static void createAllTables() {
@@ -29,7 +30,7 @@ class CommonMethods {
 		String state = "";
 		try {
 			DBConnection dbc = new DBConnection();
-			ResultSet rst = dbc.executeQuery("SELECT state FROM county WHERE name='"+county+"'");
+			ResultSet rst = dbc.executeQuery("SELECT state FROM county WHERE name='" + county + "'");
 			rst.next();
 			state = rst.getString(1);
 			dbc.close();
@@ -40,22 +41,54 @@ class CommonMethods {
 	}
 
 	static ArrayList getCounties(String state) {
-	    ArrayList counties = new ArrayList();
+
+		// add the table to the frame
+		ArrayList counties = new ArrayList();
 		try {
 			DBConnection dbc = new DBConnection();
-			ResultSet rst = dbc.executeQuery("SELECT name FROM county WHERE state='"+state+"'");
+			ResultSet rst = dbc.executeQuery("SELECT name FROM county WHERE state='" + state + "'");
 			ResultSetMetaData metaData = rst.getMetaData();
-    		int columns = metaData.getColumnCount();
+			String columnNames = metaData.getColumnName(1);
+
+			int columns = metaData.getColumnCount();
 			while (rst.next()) {
-				for (int i=1; i<= columns; i++) {
+				for (int i = 1; i <= columns; i++) {
 					counties.add(rst.getObject(i));
-    			}
+				}
 			}
 			dbc.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return counties;
+	}
+
+	/**
+	 * 
+	 * @param ResutlSet 
+	 * @return TableModel
+	 */
+	public static TableModel resultSetToTableModel(ResultSet rst) {
+		try {
+			ResultSetMetaData metaData = rst.getMetaData();
+			int numberOfColumns = metaData.getColumnCount();
+			Vector columnNames = new Vector();
+			for (int column = 0; column < numberOfColumns; column++) {
+				columnNames.addElement(metaData.getColumnLabel(column + 1));
+			}
+			Vector rows = new Vector();
+			while (rst.next()) {
+				Vector newRow = new Vector();
+				for (int i = 1; i <= numberOfColumns; i++) {
+					newRow.addElement(rst.getObject(i));
+				}
+				rows.addElement(newRow);
+			}
+			return new DefaultTableModel(rows, columnNames);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

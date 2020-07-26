@@ -1,5 +1,6 @@
 package swing;
 
+import java.util.*;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,10 +26,18 @@ class DBConnection {
 										  // askar -p
 			String hostName = "localhost";
 			String databaseURL = "jdbc:mysql://" + hostName + "/" + databasePrefix + "?autoReconnect=true&useSSL=false";
-			String password = "YOUR PASS"; // please enter your own password
+			String password = "YOR PASS"; // please enter your own password
 
 			conn = DriverManager.getConnection(databaseURL, netID, password);
 			stmt = conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	void close() {
+		try {
+			stmt.close();
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -61,13 +70,6 @@ class DBConnection {
 		close();
 		return cnt;
 	}
+	
 
-	void close() {
-		try {
-			stmt.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 }
