@@ -925,7 +925,7 @@ public class Editor extends JFrame {
 					}else if(name.isEmpty() & state.isEmpty() & pop.isEmpty() & !death.isEmpty()) {
 						query = ("SELECT * FROM county WHERE total_deaths"+deathR+""+death+"");
 					}else {
-						query = query = "SELECT * FROM county";
+						query = "SELECT * FROM county";
 					}
 					
 					userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
