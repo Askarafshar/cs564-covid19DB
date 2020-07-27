@@ -66,6 +66,7 @@ public class Editor extends JFrame {
 	private JTextField soc_primaryText;
 	private JTable userTable;
 	private JTable editorTable;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -217,7 +218,7 @@ public class Editor extends JFrame {
 		lblSelectFieldsTo.setBounds(575, 12, 155, 16);
 		countyFilter.add(lblSelectFieldsTo);
 		
-		JCheckBox retName_cnty = new JCheckBox("Name");
+		JCheckBox retName_cnty = new JCheckBox("County Name");
 		retName_cnty.setSelected(true);
 		retName_cnty.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		retName_cnty.setBounds(744, 9, 112, 24);
@@ -264,12 +265,12 @@ public class Editor extends JFrame {
 
 		JLabel lblCases = new JLabel("Cases");
 		lblCases.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblCases.setBounds(334, 12, 55, 16);
+		lblCases.setBounds(279, 12, 55, 16);
 		casesFilter.add(lblCases);
 
 		JLabel lblDeaths = new JLabel("Deaths");
 		lblDeaths.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblDeaths.setBounds(334, 60, 55, 16);
+		lblDeaths.setBounds(279, 37, 55, 16);
 		casesFilter.add(lblDeaths);
 
 		JComboBox caseST_comboMM = new JComboBox();
@@ -319,25 +320,25 @@ public class Editor extends JFrame {
 		JComboBox case_caseRelation = new JComboBox();
 		case_caseRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		case_caseRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		case_caseRelation.setBounds(381, 8, 63, 25);
+		case_caseRelation.setBounds(320, 8, 63, 25);
 		casesFilter.add(case_caseRelation);
 
 		case_numCase = new JTextField();
 		case_numCase.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		case_numCase.setColumns(10);
-		case_numCase.setBounds(456, 11, 114, 20);
+		case_numCase.setBounds(390, 11, 114, 20);
 		casesFilter.add(case_numCase);
 
 		JComboBox case_deathRelation = new JComboBox();
 		case_deathRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		case_deathRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		case_deathRelation.setBounds(381, 56, 63, 25);
+		case_deathRelation.setBounds(320, 34, 63, 25);
 		casesFilter.add(case_deathRelation);
 
 		case_numDeaths = new JTextField();
 		case_numDeaths.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		case_numDeaths.setColumns(10);
-		case_numDeaths.setBounds(456, 59, 114, 20);
+		case_numDeaths.setBounds(390, 36, 114, 20);
 		casesFilter.add(case_numDeaths);
 		
 		JLabel lblSelectFieldsTo_1 = new JLabel("Select fields to be returned:");
@@ -380,6 +381,28 @@ public class Editor extends JFrame {
 		retState_cases.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		retState_cases.setBounds(863, 48, 112, 24);
 		casesFilter.add(retState_cases);
+		
+		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		textField.setColumns(10);
+		textField.setBounds(361, 60, 143, 20);
+		casesFilter.add(textField);
+		
+		JComboBox stateDropdown_1 = new JComboBox();
+		stateDropdown_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		stateDropdown_1.setBounds(544, 33, 196, 25);
+		casesFilter.add(stateDropdown_1);
+		
+		JLabel lblState_1 = new JLabel("State");
+		lblState_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblState_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblState_1.setBounds(498, 37, 43, 16);
+		casesFilter.add(lblState_1);
+		
+		JLabel lblCountyName_1 = new JLabel("County Name");
+		lblCountyName_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblCountyName_1.setBounds(279, 62, 75, 16);
+		casesFilter.add(lblCountyName_1);
 
 		JPanel raceFilter = new JPanel();
 		filterPanel.add(raceFilter, "RACE");
