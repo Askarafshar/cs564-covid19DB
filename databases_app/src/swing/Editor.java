@@ -321,24 +321,28 @@ public class Editor extends JFrame {
 		case_caseRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		case_caseRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		case_caseRelation.setBounds(320, 8, 63, 25);
+
 		casesFilter.add(case_caseRelation);
 
 		case_numCase = new JTextField();
 		case_numCase.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		case_numCase.setColumns(10);
 		case_numCase.setBounds(390, 11, 114, 20);
+
 		casesFilter.add(case_numCase);
 
 		JComboBox case_deathRelation = new JComboBox();
 		case_deathRelation.setModel(new DefaultComboBoxModel(EqualityOperator.values()));
 		case_deathRelation.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		case_deathRelation.setBounds(320, 34, 63, 25);
+
 		casesFilter.add(case_deathRelation);
 
 		case_numDeaths = new JTextField();
 		case_numDeaths.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		case_numDeaths.setColumns(10);
 		case_numDeaths.setBounds(390, 36, 114, 20);
+
 		casesFilter.add(case_numDeaths);
 		
 		JLabel lblSelectFieldsTo_1 = new JLabel("Select fields to be returned:");
@@ -759,6 +763,8 @@ public class Editor extends JFrame {
 		userTable = new JTable();
 		scrollPane.setViewportView(userTable);
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		//TableColumnManager tcm = new TableColumnManager(userTable);
+		//tcm.hideColumn("E");
 		
 		JCheckBox enableCounty = new JCheckBox("");
 		enableCounty.setBounds(78, 0, 21, 24);
@@ -1133,6 +1139,9 @@ public class Editor extends JFrame {
 				// arguments to construct a query to send to the database. and lastly
 				// update the table to reflect the given query
 				
+				//which tables are enabled
+				
+				
 				//get the filterPane component that is visible
 				Component[] c = filterPanel.getComponents();
 				boolean[] visComp = new boolean[4];
@@ -1145,8 +1154,45 @@ public class Editor extends JFrame {
 					if (visComp[i] == true)
 						toFilter = filters[i];
 				}//visible component is tableToFilter
+				
+				if (enableCounty.isSelected() & enableCases.isSelected()) {
+					String name = nameFilter.getText();
+					String state = String.valueOf(stateDropdown.getSelectedItem());
+					String pop = popFilter.getText();
+					String popR = String.valueOf(popRelation.getSelectedItem());
+					String death = deathFilter.getText();
+					String deathR = String.valueOf(deathRelation.getSelectedItem());
+					String numCase = case_numCase.getText();
+					String numCaseR = String.valueOf(case_caseRelation.getSelectedItem());
+					String numDeaths = case_numDeaths.getText();
+					String numDeathsR = String.valueOf(case_deathRelation.getSelectedItem());
+					String stMM = String.valueOf(caseST_comboMM.getSelectedItem());
+					String stDD = String.valueOf(caseST_comboDD.getSelectedItem());
+					String stYY = String.valueOf(caseST_comboYYYY.getSelectedItem());
+					String enMM = String.valueOf(caseEND_comboMM.getSelectedItem());
+					String enDD = String.valueOf(caseEND_comboDD.getSelectedItem());
+					String enYY = String.valueOf(caseEND_comboYYYY.getSelectedItem());
+					
+				
+					String query = null;
+					if(name.isEmpty() & state.isEmpty() & !pop.isEmpty()
+							& death.isEmpty() & !numDeaths.isEmpty() & !retName_cases.isSelected() 
+							& !retState_cases.isSelected() & !retID_cases.isSelected()) {
+						query = ("SELECT c.name,c.state,c.total_deaths, c.population, ca.occurred_at,ca.daily_deaths,ca.confirmed"
+								+ " FROM county c, cases ca WHERE c.name=ca.name AND"
+								+ " c.population"+popR+""+pop+" AND ca.daily_deaths"+numDeathsR+""+numDeaths+"");
+					}else if(name.isEmpty() & state.isEmpty() & !pop.isEmpty() & !numDeaths.isEmpty() & death.isEmpty()) {
+						query = ("SELECT * FROM county c, cases ca WHERE c.name=ca.name AND"
+								+ " c.population"+popR+""+pop+" AND ca.daily_deaths"+numDeathsR+""+numDeaths+"");
+					}else {
+						query = "SELECT * FROM county c, cases ca WHERE c.name=ca.name";
+					}
+					userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
+				}
 
-				if (toFilter == "County") {
+				if (enableCounty.isSelected() & !enableCases.isSelected() & 
+					!enableRace.isSelected() & !enableSocio.isSelected()) {
+										
 					String name = nameFilter.getText();
 					String state = String.valueOf(stateDropdown.getSelectedItem());
 					String pop = popFilter.getText();
@@ -1154,8 +1200,18 @@ public class Editor extends JFrame {
 					String death = deathFilter.getText();
 					String deathR = String.valueOf(deathRelation.getSelectedItem());
 					
+					String retName = retName_cnty.getText().toLowerCase();
+					String retState = returnState_cnty.getText().toLowerCase();
+					String retPop = returnPop_cnty.getText().toLowerCase();
+					String retDeaths = returnDeaths_cnty.getText().toLowerCase();
+					
 					String query = null;
-					if(!name.isEmpty() & !state.isEmpty() & !pop.isEmpty() & !death.isEmpty()) {
+					if(name.isEmpty() & !state.isEmpty() & !pop.isEmpty() 
+							& !death.isEmpty() & !returnPop_cnty.isSelected() ) {
+						System.out.print("before Query!");
+						query = ("SELECT name, state,total_deaths  FROM county WHERE total_deaths"+deathR+""+death+" AND state='"+state+"'AND population"+popR+""+pop+"");
+						System.out.print("After Query!");
+					}else if(!name.isEmpty() & !state.isEmpty() & !pop.isEmpty() & !death.isEmpty()) {
 						query = ("SELECT * FROM county WHERE name='"+name+"' AND state='"+state+"'"
 								+" AND population"+popR+""+pop+" AND total_deaths"+deathR+""+death+"");
 					}else if(name.isEmpty() & !state.isEmpty() & !pop.isEmpty() & !death.isEmpty()) {
@@ -1188,7 +1244,8 @@ public class Editor extends JFrame {
 					
 					userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
 				}
-				if (toFilter == "Cases") {
+				if (!enableCounty.isSelected() & enableCases.isSelected() & 
+					!enableRace.isSelected() & !enableSocio.isSelected()) {
 					String numCase = case_numCase.getText();
 					String numCaseR = String.valueOf(case_caseRelation.getSelectedItem());
 					String numDeaths = case_numDeaths.getText();
@@ -1220,7 +1277,8 @@ public class Editor extends JFrame {
 									
 					userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
 				}
-				if (toFilter == "Race") {
+				if (!enableCounty.isSelected() & !enableCases.isSelected() & 
+					enableRace.isSelected() & !enableSocio.isSelected()) {
 					String blk = race_blkPercent.getText();
 					String blkR = String.valueOf(race_blkRelation.getSelectedItem());
 					String amerIn = race_amerInPercent.getText();
@@ -1276,7 +1334,8 @@ public class Editor extends JFrame {
 					userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
 					
 				}
-				if (toFilter == "Socioeconomic") {
+				if (!enableCounty.isSelected() & !enableCases.isSelected() & 
+						!enableRace.isSelected() & enableSocio.isSelected()) {
 					String income = soc_incomeText.getText();
 					String incomeR = String.valueOf(soc_incomeRelation.getSelectedItem());
 					String life_exp = soc_lifeText.getText();
@@ -1336,7 +1395,10 @@ public class Editor extends JFrame {
 					nameFilter.setText("");
 					deathFilter.setText("");
 					popFilter.setText("");
-					//stateDropdown.setText("");? doesn't work this way!
+					stateDropdown.setSelectedIndex(0);
+					popRelation.setSelectedIndex(0);
+					deathRelation.setSelectedIndex(0);
+					returnPop_cnty.setSelected(true);
 					String query = "SELECT * FROM county";
 					userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
 				}
