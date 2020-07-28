@@ -1146,20 +1146,32 @@ public class Editor extends JFrame {
 		// run top 10 cases store procedure
 		btnTopCases.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO
+				DBConnection dbc = new DBConnection();
+				String query = null;
+				String state = btnTopCases.getText();
+				query = ("CALL top10Confirmed");
+				userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
 			}
 		});
 		// run top 10 deaths store procedure
 		btnTopDeaths.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO
-			}
+				DBConnection dbc = new DBConnection();
+				String query = null;
+				String state = btnTopDeaths.getText();
+				query = ("CALL top10Deaths");
+				userTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));			}
 		});
 		// run top cases in a day for a state store procedure
 		btnMaxState.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO
-				comboMostState.getSelectedItem();	// this is the state name
+				DBConnection dbc = new DBConnection();
+				String state = String.valueOf(comboMostState.getSelectedItem());
+				String query = null;
+				query = ("CALL maxConfirmed('"+state+"', @maxC)");
+				ResultSet rst = dbc.executeQuery(query);
+				query = ("SELECT @maxC");
+				editorTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
 			}
 		});
 		// go to editor screen on login button
