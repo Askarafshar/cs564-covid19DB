@@ -73,6 +73,7 @@ public class Editor extends JFrame {
 	private JTextField cntyName_edit;
 	
 	String cellID = null;
+	int caseID_start = 186741;
 
 	/**
 	 * Launch the application.
@@ -1098,11 +1099,12 @@ public class Editor extends JFrame {
 					String occDay = new_comboDD.getSelectedItem().toString();
 					String occMonth = new_comboMM.getSelectedItem().toString();
 					String occYear = new_comboYYYY.getSelectedItem().toString();
-					String occValue = occYear + "-" + occMonth + "-" + occDay;
+					String occValue = occYear + occMonth + occDay;
 					
-					String query = "insert into cases (occurred_at, daily_deaths, confirmed, name, state) "
-							+ "values (" + occValue + txtNewDeaths.getText() + txtNewCases.getText() 
-							+ cntyName_edit.getText() + stateDropdown_2.getSelectedItem() + ")";
+					String query = "insert into cases (`case_id`, `occurred_at`, `daily_deaths`, `confirmed`, `name`, `state`) "
+							+ "values (" + caseID_start + ", " + occValue + ", " + txtNewDeaths.getText() + ", " + txtNewCases.getText() 
+							+ ",'" + cntyName_edit.getText().toString() + "','" + stateDropdown_2.getSelectedItem() + "')";
+					caseID_start++;
 					DBConnection dbc = new DBConnection();
 					dbc.executeOther(query);
 					JOptionPane.showMessageDialog(null, "Record Inserted!"); 	
