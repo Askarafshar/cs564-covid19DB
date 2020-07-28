@@ -14,12 +14,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import java.awt.Font;
@@ -67,6 +70,9 @@ public class Editor extends JFrame {
 	private JTable userTable;
 	private JTable editorTable;
 	private JTextField textField;
+	private JTextField cntyName_edit;
+	
+	String cellID = null;
 
 	/**
 	 * Launch the application.
@@ -178,13 +184,7 @@ public class Editor extends JFrame {
 		nameFilter.setColumns(10);
 
 		JComboBox stateDropdown = new JComboBox();
-		stateDropdown.setModel(new DefaultComboBoxModel(new String[] { "", "Alabama", "Alaska", "Arizona", "Arkansas",
-				"California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
-				"Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts",
-				"Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
-				"New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
-				"Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah",
-				"Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming" }));
+		stateDropdown.setModel(new DefaultComboBoxModel(new String[] {"", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"}));
 		stateDropdown.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		stateDropdown.setBounds(94, 36, 196, 25);
 		countyFilter.add(stateDropdown);
@@ -786,12 +786,6 @@ public class Editor extends JFrame {
 		contentPanel.add(EditorPanel, "EDITOR");
 		EditorPanel.setLayout(null);
 
-		JComboBox countyList = new JComboBox();
-		countyList.setMaximumRowCount(1000);
-		countyList.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		countyList.setBounds(113, 0, 250, 20);
-		EditorPanel.add(countyList);
-
 		JButton btnDeleteEntry = new JButton("Delete Entry");
 		btnDeleteEntry.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnDeleteEntry.setBounds(0, 628, 105, 23);
@@ -801,11 +795,6 @@ public class Editor extends JFrame {
 		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnLogout.setBounds(869, 628, 105, 23);
 		EditorPanel.add(btnLogout);
-
-		JLabel lblSelectedCounty = new JLabel("Selected County:");
-		lblSelectedCounty.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblSelectedCounty.setBounds(0, 3, 95, 14);
-		EditorPanel.add(lblSelectedCounty);
 
 		JButton btnModifyEntry = new JButton("Modify Entry");
 		btnModifyEntry.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -855,7 +844,7 @@ public class Editor extends JFrame {
 
 		JButton btnAddEntry = new JButton("Add Entry");
 		btnAddEntry.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnAddEntry.setBounds(439, 53, 105, 23);
+		btnAddEntry.setBounds(812, 52, 105, 23);
 		newEntryPanel.add(btnAddEntry);
 
 		JComboBox new_comboMM = new JComboBox();
@@ -879,6 +868,29 @@ public class Editor extends JFrame {
 		new_comboYYYY.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		new_comboYYYY.setBounds(265, 18, 75, 25);
 		newEntryPanel.add(new_comboYYYY);
+		
+		cntyName_edit = new JTextField();
+		cntyName_edit.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		cntyName_edit.setColumns(10);
+		cntyName_edit.setBounds(485, 23, 196, 20);
+		newEntryPanel.add(cntyName_edit);
+		
+		JComboBox stateDropdown_2 = new JComboBox();
+		stateDropdown_2.setModel(new DefaultComboBoxModel(new String[] {"", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"}));
+		stateDropdown_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		stateDropdown_2.setBounds(485, 49, 196, 25);
+		newEntryPanel.add(stateDropdown_2);
+		
+		JLabel lblState_2 = new JLabel("State");
+		lblState_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblState_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblState_2.setBounds(403, 53, 75, 16);
+		newEntryPanel.add(lblState_2);
+		
+		JLabel lblCountyName_2 = new JLabel("County Name");
+		lblCountyName_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblCountyName_2.setBounds(403, 25, 75, 16);
+		newEntryPanel.add(lblCountyName_2);
 
 		JPanel modifyEntryPanel = new JPanel();
 		updatePanel.add(modifyEntryPanel, "MODIFY");
@@ -1000,14 +1012,19 @@ public class Editor extends JFrame {
 				c.show(contentPanel, "USER");
 			}
 		});
+		
 		// open modify tab within editor screen
 		btnModifyEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO
 				// need to grab the selected record from the table and populate
 				// the previous fields on the modify screen with its current
 				// data
-
+				int row = editorTable.getSelectedRow();
+				cellID = editorTable.getModel().getValueAt(row,0).toString();
+				lblPrevdate.setText(editorTable.getModel().getValueAt(row,1).toString());
+				lblPrevcases.setText(editorTable.getModel().getValueAt(row,3).toString());
+				lblPrevdeaths.setText(editorTable.getModel().getValueAt(row,2).toString());
+				
 				CardLayout c = (CardLayout) updatePanel.getLayout();
 				c.show(updatePanel, "MODIFY");
 			}
@@ -1015,18 +1032,30 @@ public class Editor extends JFrame {
 		// save modified tuple
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO
 				// update the previously selected tuple to have the attribute
 				// values as set in the new fields for modify
 				// then update table
-				int row = cases.getSelectedRow();
-				String cell = cases.getModel().getValueAt(row,0).toString();
 				try {
-					String query = "update cases set name ='"+countyList.getSelectedItem().toString()+"', occurred_at = '"+mod_comboMM.getSelectedItem().toString()+ mod_comboDD.getSelectedItem().toString()+ mod_comboYYYY.getSelectedItem().toString()+"', confirmed = '"+txtNewCases_mod.getText()+"', daily_deaths = '"+txtNewDeaths_mod.getText()+"' where case_id ="+cell;
-					DBConnection connection = new DBConnection();
-					PreparedStatement pst = connection.preparedStatement(query);
-					pst.execute();
+					String occDay = mod_comboDD.getSelectedItem().toString();
+					String occMonth = mod_comboMM.getSelectedItem().toString();
+					String occYear = mod_comboYYYY.getSelectedItem().toString();
+					String occValue = occYear + occMonth + occDay;
+					
+					String query = "update cases set occurred_at = " + occValue + ", daily_deaths = " 
+							+ txtNewDeaths_mod.getText() + ", confirmed = " + txtNewCases_mod.getText() 
+							+ " where case_id = " + cellID;
+					System.out.print(query);
+					DBConnection dbc = new DBConnection();
+					dbc.executeOther(query);
 					JOptionPane.showMessageDialog(null, "Record Updated!"); 
+					cellID = null;
+					txtNewDeaths_mod.setText("");
+					txtNewCases_mod.setText("");
+					// update table
+					query = null;
+					query = "select * from cases";
+					editorTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
+					dbc.close();
 				}catch (Exception eUpdate) {
 					JOptionPane.showMessageDialog(null, eUpdate);
 				}	
@@ -1042,29 +1071,27 @@ public class Editor extends JFrame {
 		// inserts a new record into the db
 		btnAddEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO
 				// grab inputs to the add fields and use those to enter
 				// a new tuple in the database
 				try {
-					String query = "insert into cases (occurred_at, daily_deaths, confirmed, name) values (?,?,?,?)";
-					DBConnection connection = new DBConnection();
-					PreparedStatement pst = connection.preparedStatement(query);
 					String occDay = new_comboDD.getSelectedItem().toString();
 					String occMonth = new_comboMM.getSelectedItem().toString();
 					String occYear = new_comboYYYY.getSelectedItem().toString();
-					String occValue = occDay+occMonth+occYear;
-					String countyValue = countyList.getSelectedItem().toString();
-					pst.setString(1, occValue);
-					pst.setString(2, txtNewDeaths.getText());
-					pst.setString(3, txtNewCases.getText());
-					pst.setString(4, countyValue);
-					pst.execute();
+					String occValue = occYear + "-" + occMonth + "-" + occDay;
+					
+					String query = "insert into cases (occurred_at, daily_deaths, confirmed, name, state) "
+							+ "values (" + occValue + txtNewDeaths.getText() + txtNewCases.getText() 
+							+ cntyName_edit.getText() + stateDropdown_2.getSelectedItem() + ")";
+					DBConnection dbc = new DBConnection();
+					dbc.executeOther(query);
 					JOptionPane.showMessageDialog(null, "Record Inserted!"); 	
 					txtNewDeaths.setText("");  
 					txtNewCases.setText(""); 
-					updateTable();//we need to create it
-					pst.close();
-					
+					// update table
+					query = null;
+					query = "select * from cases";
+					editorTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
+					dbc.close();
 				}catch (Exception eInsert) {
 					JOptionPane.showMessageDialog(null, eInsert);
 				}
@@ -1073,20 +1100,19 @@ public class Editor extends JFrame {
 		// removes a record
 		btnDeleteEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO
 				// get selected entry in the table and delete it from
 				// the database, then refresh the table
-				int row = cases.getSelectedRow();
-				String cell = cases.getModel().getValueAt(row,0).toString();
-				String query = "delete from case where case_id =" + cell;
+				int row = editorTable.getSelectedRow();
+				String cell = editorTable.getModel().getValueAt(row,0).toString();
+				String query = "delete from cases where case_id = " + cell;
 				try {
-					DBConnection connection = new DBConnection();
-					PreparedStatement pst = connection.preparedStatement(query);
-					pst.execute();
+					DBConnection dbc = new DBConnection();
+					dbc.executeOther(query);
 					JOptionPane.showMessageDialog(null, "Record Deleted!"); 
-					updateTable();//we need to create it
-					pst.close();
-					
+					// update table
+					query = "select * from cases";
+					editorTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
+					dbc.close();
 				}catch (Exception eDelete) {
 					JOptionPane.showMessageDialog(null, eDelete); 
 				}
@@ -1097,8 +1123,11 @@ public class Editor extends JFrame {
 		// go to editor screen on login button
 		btnEditorLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				DBConnection dbc = new DBConnection();
 				CardLayout c = (CardLayout) contentPanel.getLayout();
 				c.show(contentPanel, "EDITOR");
+				String query = "select * from cases";
+				editorTable.setModel(CommonMethods.resultSetToTableModel(dbc.executeQuery(query)));
 			}
 		});
 		// open county filter
@@ -1133,7 +1162,6 @@ public class Editor extends JFrame {
 		btnApplyFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				DBConnection dbc = new DBConnection();
-				// TODO
 				// this button press should cause the program to fetch the current
 				// entries into the current filter screen. it should then use these
 				// arguments to construct a query to send to the database. and lastly
@@ -1374,7 +1402,6 @@ public class Editor extends JFrame {
 		btnClearFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DBConnection dbc = new DBConnection();
-				// TODO
 				// this should cause the program to reset the filter fields and
 				// get the un-filtered version of the database table
 				
