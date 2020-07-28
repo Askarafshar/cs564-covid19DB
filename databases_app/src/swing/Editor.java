@@ -781,6 +781,27 @@ public class Editor extends JFrame {
 		JCheckBox enableSocio = new JCheckBox("");
 		enableSocio.setBounds(818, 2, 21, 24);
 		UserPanel.add(enableSocio);
+		
+		JButton btnTopCases = new JButton("Top 10 Cases");
+		btnTopCases.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnTopCases.setBounds(143, 121, 115, 26);
+		UserPanel.add(btnTopCases);
+		
+		JButton btnTopDeaths = new JButton("Top 10 Deaths");
+		btnTopDeaths.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnTopDeaths.setBounds(270, 121, 126, 26);
+		UserPanel.add(btnTopDeaths);
+		
+		JButton btnMaxState = new JButton("Most Confirmed for State:");
+		btnMaxState.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnMaxState.setBounds(408, 121, 180, 26);
+		UserPanel.add(btnMaxState);
+		
+		JComboBox comboMostState = new JComboBox();
+		comboMostState.setModel(new DefaultComboBoxModel(new String[] {"", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"}));
+		comboMostState.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		comboMostState.setBounds(594, 122, 148, 25);
+		UserPanel.add(comboMostState);
 
 		JPanel EditorPanel = new JPanel();
 		contentPanel.add(EditorPanel, "EDITOR");
@@ -1120,6 +1141,25 @@ public class Editor extends JFrame {
 		});
 
 		// ------------------- USER VIEW ----------------------------
+		// run top 10 cases store procedure
+		btnTopCases.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO
+			}
+		});
+		// run top 10 deaths store procedure
+		btnTopDeaths.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+			}
+		});
+		// run top cases in a day for a state store procedure
+		btnMaxState.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+				comboMostState.getSelectedItem();	// this is the state name
+			}
+		});
 		// go to editor screen on login button
 		btnEditorLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
