@@ -10,7 +10,7 @@ import java.sql.Statement;
 public class SimpleQueryDemo {
 
 	 static final String databasePrefix ="covid19";//Name of your database. 
-	 static final String netID ="SQL USER"; // User ID by which you connect to the db. Like mysql -u askar -p 
+	 static final String netID ="SQL USER"; // User ID by which you connect to the db. 
 	 static final String hostName ="localhost"; 
 	 static final String databaseURL ="jdbc:mysql://"+hostName+"/"+databasePrefix+"?autoReconnect=true&useSSL=false";
 	 static final String password="YOUR OWN PASSWORD"; // please enter your own password
